@@ -1,8 +1,6 @@
 <template>
   <Layout>
     <router-view />
-
-    <router-view name="sidebar" />
   </Layout>
 </template>
 

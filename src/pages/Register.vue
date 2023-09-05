@@ -57,36 +57,47 @@ export default {
 
   props: ["id"],
 
-  // methods: {
-  //   handleNext() {
-  //     if (this.postList.length > this.id) {
-  //       this.$router.push("/posts/" + (+this.id + 1));
-  //     } else {
-  //       this.$router.replace("/posts");
-  //     }
+  methods: {
+    handleNext() {
+      if (this.postList.length > this.id) {
+        this.$router.push("/posts/" + (+this.id + 1));
+      } else {
+        this.$router.replace("/posts");
+      }
+    },
+
+    handlePrevious() {
+      if (this.id > 1) {
+        this.$router.push("/posts/" + (+this.id - 1));
+      } else {
+        this.$router.replace("/posts");
+      }
+    },
+  },
+
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      vm.post = vm.postList.find((item) => item.id === +to.params.id);
+    });
+  },
+
+  beforeRouteUpdate(to, from) {
+    this.post = this.postList.find((item) => item.id === +to.params.id);
+  },
+
+  beforeRouteLeave(to, from) {
+    // this.post = this.postList.find((item) => item.id === +this.id);
+  },
+
+  // watch: {
+  //   id: {
+  //     handler: function (newId) {
+  //       const post = this.postList.find((post) => post.id === +newId);
+  //       this.post = post;
+  //       console.log(+newId);
+  //     },
+  //     immediate: true,
   //   },
-
-  //   handlePrevious() {
-  //     if (this.id > 1) {
-  //       this.$router.push("/posts/" + (+this.id - 1));
-  //     } else {
-  //       this.$router.replace("/posts");
-  //     }
-  //   },
-  // },
-
-  // beforeRouteEnter(to, from, next) {
-  //   next((vm) => {
-  //     vm.post = vm.postList.find((item) => item.id === +to.params.id);
-  //   });
-  // },
-
-  // beforeRouteUpdate(to, from) {
-  //   this.post = this.postList.find((item) => item.id === +to.params.id);
-  // },
-
-  // beforeRouteLeave(to, from) {
-  //   // this.post = this.postList.find((item) => item.id === +this.id);
   // },
 };
 </script>
