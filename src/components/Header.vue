@@ -1,8 +1,6 @@
 <template>
   <nav class="bg-white border-gray-200 dark:bg-gray-900">
-    <div
-      class="container max-w-screen-xl flex items-center justify-between py-4 px-10"
-    >
+    <div class="container flex items-center justify-between py-4 mx-auto px-3">
       <a href="" class="flex items-center">
         <span
           class="self-center text-xl text-gray-400 font-semibold whitespace-nowrap"

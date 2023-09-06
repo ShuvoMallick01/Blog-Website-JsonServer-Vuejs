@@ -1,15 +1,49 @@
 <template>
-  <h1 class="text-2xl font-semibold text-slate-700 uppercase mt-5">
-    Page Name: <span class="underline">User Page</span>
-  </h1>
+  <section class="xl:w-2/6 lg:w-2/5 w-2/3 mx-auto py-16">
+    <h3 class="text-center font-bold text-xl text-gray-600 mb-10">
+      Sign in to your account
+    </h3>
 
-  <ul>
-    <li v-for="id in 5">
-      <router-link :to="'user/' + id">User Id: {{ id }}</router-link>
-    </li>
-  </ul>
+    <form>
+      <div class="mb-6">
+        <label for="email" class="block mb-2 text-sm font-medium text-gray-900"
+          >Your email</label
+        >
+        <input
+          type="email"
+          id="email"
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400"
+          placeholder="name@flowbite.com"
+          required
+        />
+      </div>
+
+      <div class="mb-6">
+        <label
+          for="password"
+          class="block mb-2 text-sm font-medium text-gray-900"
+          >Your Password</label
+        >
+        <input
+          type="password"
+          id="password"
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400"
+          placeholder="name@flowbite.com"
+          required
+        />
+      </div>
+
+      <button
+        type="submit"
+        class="text-white bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-4 py-2.5 text-center"
+      >
+        Submit
+      </button>
+    </form>
+  </section>
 </template>
 
+<!-- FUUNCTIONALITY -->
 <script>
 export default {};
 </script>
