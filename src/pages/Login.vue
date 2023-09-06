@@ -4,12 +4,15 @@
       Sign in to your account
     </h3>
 
-    <form>
+    <p>{{ user }}</p>
+
+    <form @submit.prevent="handleForm()">
       <div class="mb-6">
         <label for="email" class="block mb-2 text-sm font-medium text-gray-900"
           >Your email</label
         >
         <input
+          v-model="email"
           type="email"
           id="email"
           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400"
@@ -25,6 +28,7 @@
           >Your Password</label
         >
         <input
+          v-model="password"
           type="password"
           id="password"
           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400"
@@ -45,5 +49,35 @@
 
 <!-- FUUNCTIONALITY -->
 <script>
-export default {};
+import { mapActions, mapState } from "pinia";
+import { useAuthStore } from "../store/auth";
+export default {
+  data() {
+    return {
+      email: "",
+      password: "",
+    };
+  },
+
+  methods: {
+    ...mapActions(useAuthStore, ["userLogin"]),
+
+    async handleForm() {
+      console.log(this.email, this.password);
+      // if (!this.email || !this.password) return alert("Input is Required");
+
+      try {
+        await this.userLogin({ email: this.email, password: this.password });
+        this.email = "";
+        this.password = "";
+      } catch (error) {
+        console.log(error);
+      }
+    },
+  },
+
+  computed: {
+    ...mapState(useAuthStore, ["user"]),
+  },
+};
 </script>

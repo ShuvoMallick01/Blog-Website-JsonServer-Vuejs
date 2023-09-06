@@ -1,17 +1,21 @@
 {
-  "name": "server",
+  "name": "json-auth",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
-    "server": "json-server --watch ./src/db.json -p 8000"
+    "start": "nodemon ./src/app.js",
+    "server": "json-server --watch ./src/db/index.js"
   },
+  "keywords": [],
   "author": "",
   "license": "ISC",
-  "dependencies": {
+  "description": "",
+  "devDependencies": {
     "json-server": "^0.17.3",
     "json-server-auth": "^2.1.0",
-    "jsonwebtoken": "^9.0.2",
-    "path": "^0.12.7"
+    "nodemon": "^3.0.1"
+  },
+  "dependencies": {
+    "jsonwebtoken": "^9.0.1"
   }
 }

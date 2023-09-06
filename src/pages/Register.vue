@@ -3,34 +3,42 @@
     <h3 class="text-center font-bold text-xl text-gray-600 mb-10">
       Register with an Email
     </h3>
+    {{ user }}
 
-    <form>
+    <form @submit.prevent="handleSubmit()">
+      <!-- Name -->
       <div class="mb-6">
         <label for="name" class="block mb-2 text-sm font-medium text-gray-900"
           >Your Full Name</label
         >
         <input
+          v-model="name"
           type="text"
           id="name"
+          name="name"
           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400"
           placeholder="name@flowbite.com"
           required
         />
       </div>
 
+      <!-- Email -->
       <div class="mb-6">
         <label for="email" class="block mb-2 text-sm font-medium text-gray-900"
           >Your email</label
         >
         <input
+          v-model="email"
           type="email"
           id="email"
+          name="email"
           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400"
           placeholder="name@flowbite.com"
           required
         />
       </div>
 
+      <!-- Password -->
       <div class="mb-6">
         <label
           for="password"
@@ -38,14 +46,17 @@
           >Your Password</label
         >
         <input
+          v-model="password"
           type="password"
           id="password"
+          name="password"
           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400"
           placeholder="name@flowbite.com"
           required
         />
       </div>
 
+      <!-- Confirm Password -->
       <div class="mb-6">
         <label
           for="confirmpassword"
@@ -53,8 +64,10 @@
           >Your Confirm Password</label
         >
         <input
+          v-model="confirmPassword"
           type="password"
           id="confirmpassword"
+          name="confirmpassword"
           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400"
           placeholder="name@flowbite.com"
           required
@@ -73,5 +86,50 @@
 
 <!-- FUUNCTIONALITY -->
 <script>
-export default {};
+import { mapActions, mapState } from "pinia";
+import { useAuthStore } from "../store/auth";
+
+export default {
+  data() {
+    return {
+      name: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    };
+  },
+
+  methods: {
+    ...mapActions(useAuthStore, ["userRegistration"]),
+
+    async handleSubmit() {
+      if (this.password !== this.confirmPassword) {
+        alert("Password Doesn't Match");
+        return;
+      }
+
+      try {
+        await this.userRegistration({
+          name: this.name,
+          email: this.email,
+          password: this.password,
+        });
+
+        this.$router.replace("/login");
+      } catch (error) {
+        console.log(error);
+      }
+      // console.log(this.name, this.email, this.password);
+
+      this.name = "";
+      this.email = "";
+      this.password = "";
+      this.confirmPassword = "";
+    },
+  },
+
+  computed: {
+    ...mapState(useAuthStore, ["user"]),
+  },
+};
 </script>

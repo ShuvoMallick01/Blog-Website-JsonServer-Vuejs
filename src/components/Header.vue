@@ -1,12 +1,12 @@
 <template>
   <nav class="bg-white border-gray-200 dark:bg-gray-900">
     <div class="container flex items-center justify-between py-4 mx-auto px-3">
-      <a href="" class="flex items-center">
+      <router-link to="/" class="flex items-center">
         <span
           class="self-center text-xl text-gray-400 font-semibold whitespace-nowrap"
           >VUE-BLOG</span
-        > </a
-      >``
+        >
+      </router-link>
 
       <div class="">
         <ul class="font-medium flex text-gray-400 gap-6 md:gap-8">

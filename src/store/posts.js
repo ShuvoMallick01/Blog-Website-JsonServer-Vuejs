@@ -9,13 +9,13 @@ export const usePostsStore = defineStore("posts", {
 
   actions: {
     async getPosts() {
-      const response = await fetch("http://localhost:8000/posts");
+      const response = await fetch("http://localhost:5000/posts");
       let posts = await response.json();
       this.posts = posts;
     },
 
     async getPost(id) {
-      const response = await fetch(`http://localhost:8000/posts/${id}`);
+      const response = await fetch(`http://localhost:5000/posts/${id}`);
       console.log(response.ok);
       if (response.ok && response.status === 200) {
         return await response.json();
