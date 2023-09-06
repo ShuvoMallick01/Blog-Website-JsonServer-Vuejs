@@ -3,7 +3,6 @@
     <h3 class="text-center font-bold text-xl text-gray-600 mb-10">
       Register with an Email
     </h3>
-    {{ user }}
 
     <form @submit.prevent="handleSubmit()">
       <!-- Name -->
@@ -88,6 +87,8 @@
 <script>
 import { mapActions, mapState } from "pinia";
 import { useAuthStore } from "../store/auth";
+import { useToast } from "vue-toastification";
+const toast = useToast();
 
 export default {
   data() {
@@ -104,21 +105,25 @@ export default {
 
     async handleSubmit() {
       if (this.password !== this.confirmPassword) {
-        alert("Password Doesn't Match");
+        // alert("Password Doesn't Match");
+        toast.error("Password Doesn't Match");
         return;
       }
 
-      try {
-        await this.userRegistration({
-          name: this.name,
-          email: this.email,
-          password: this.password,
-        });
+      await this.userRegistration({
+        name: this.name,
+        email: this.email,
+        password: this.password,
+      });
 
+      if (this.error) {
+        // console.log(error);
+        toast.error(this.error);
+      } else {
+        toast.success("Registration Successfully!");
         this.$router.replace("/login");
-      } catch (error) {
-        console.log(error);
       }
+
       // console.log(this.name, this.email, this.password);
 
       this.name = "";
@@ -129,7 +134,7 @@ export default {
   },
 
   computed: {
-    ...mapState(useAuthStore, ["user"]),
+    ...mapState(useAuthStore, ["user", "error"]),
   },
 };
 </script>

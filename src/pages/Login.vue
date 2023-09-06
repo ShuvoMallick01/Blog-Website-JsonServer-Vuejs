@@ -4,7 +4,7 @@
       Sign in to your account
     </h3>
 
-    <p>{{ user }}</p>
+    <!-- <p>{{ user }}</p> -->
 
     <form @submit.prevent="handleForm()">
       <div class="mb-6">
@@ -51,6 +51,10 @@
 <script>
 import { mapActions, mapState } from "pinia";
 import { useAuthStore } from "../store/auth";
+import { useToast } from "vue-toastification";
+
+const toast = useToast();
+
 export default {
   data() {
     return {
@@ -64,20 +68,33 @@ export default {
 
     async handleForm() {
       console.log(this.email, this.password);
-      // if (!this.email || !this.password) return alert("Input is Required");
 
-      try {
-        await this.userLogin({ email: this.email, password: this.password });
-        this.email = "";
-        this.password = "";
-      } catch (error) {
-        console.log(error);
+      await this.userLogin({ email: this.email, password: this.password });
+
+      if (this.error) {
+        toast(this.error);
+        this.error = null;
+      } else {
+        toast.success("Login Successfully");
+        this.$router.replace("/");
       }
+
+      this.email = "";
+      this.password = "";
+
+      // if {
+      //   this.email = "";
+      //   this.password = "";
+      //   toast.success("Login Successfully");
+      // } catch (error) {
+      //   toast.error("Login Failed");
+      //   console.log(error);
+      // }
     },
   },
 
   computed: {
-    ...mapState(useAuthStore, ["user"]),
+    ...mapState(useAuthStore, ["user", "error"]),
   },
 };
 </script>

@@ -17,6 +17,18 @@
       "password": "$2a$10$XKKwysm0CpkpT8IZ1f2wY.oHsqoGybe8Hgt5NtlQdI1tbUURUXiQe",
       "name": "shuvo",
       "id": 3
+    },
+    {
+      "email": "root2@gmail.com",
+      "password": "$2a$10$G3xR3gG/QtPZdMK4AeHlUehQaR70eQjY4lt.RKsV6MzeNYlziVLFe",
+      "name": "root2",
+      "id": 4
+    },
+    {
+      "email": "root3@gmail.com",
+      "password": "$2a$10$IW5FbbKb3ck.nlH1SX0OReG3oZWBiBoPjG6emg9.gXa5uWNhaFpDC",
+      "name": "root3",
+      "id": 5
     }
   ],
   "posts": [

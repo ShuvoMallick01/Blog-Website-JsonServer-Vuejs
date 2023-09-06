@@ -1,6 +1,6 @@
 <template>
   <h1 class="text-2xl font-semibold text-slate-700 uppercase mt-5">
-    This is <span class="underline">About Page</span>
+    Create Post
   </h1>
 
   <p class="mt-3 leading-6 text-justify text-slate-600">
@@ -12,13 +12,6 @@
     quam eveniet pariatur tempora tempore assumenda sapiente repellat quod
     voluptatem enim.
   </p>
-
-  <button
-    class="bg-slate-200 mt-8 p-2 rounded-lg"
-    @click="$router.replace('/')"
-  >
-    Go Back to Home
-  </button>
 </template>
 
 <script>

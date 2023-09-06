@@ -3,7 +3,10 @@ import { defineStore } from "pinia";
 export const useAuthStore = defineStore("authStore", {
   state() {
     return {
-      user: null,
+      user: localStorage.getItem("user")
+        ? JSON.parse(localStorage.getItem("user"))
+        : null,
+      error: null,
     };
   },
 
@@ -19,14 +22,14 @@ export const useAuthStore = defineStore("authStore", {
       });
 
       console.log(response);
-      // const user = await response.json();
-      // this.user = user;
 
-      if (!response.ok || !response.status === 400)
-        throw new Error("RESGISTER USER: someting went wrong");
-
-      const user = await response.json();
-      this.user = user;
+      if (response.ok && response.status === 201) {
+        const user = await response.json();
+        localStorage.setItem("user", JSON.stringify(user));
+        this.user = user;
+      } else {
+        this.error = await response.json();
+      }
     },
 
     async userLogin(data) {
@@ -41,11 +44,22 @@ export const useAuthStore = defineStore("authStore", {
 
       console.log(response);
 
-      if (!response.ok || !response.status === 400)
-        throw new Error("RESGISTER USER: someting went wrong");
+      // if (!response.ok || !response.status === 400)
+      //   throw new Error("RESGISTER USER: someting went wrong");
 
-      const user = await response.json();
-      this.user = user;
+      if (response.ok && response.status === 200) {
+        const user = await response.json();
+        localStorage.setItem("user", JSON.stringify(user));
+        this.user = user;
+      } else {
+        this.error = await response.json();
+      }
+    },
+  },
+
+  getters: {
+    isAuthenticated() {
+      return this.user ? true : false;
     },
   },
 });

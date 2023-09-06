@@ -28,7 +28,7 @@
             >
           </li>
           <li>
-            <router-link to="/posts" class="hover:text-slate-300 duration-300"
+            <router-link to="/myposts" class="hover:text-slate-300 duration-300"
               >My Post</router-link
             >
           </li>
