@@ -32,7 +32,7 @@ export const router = createRouter({
       path: "/posts/:id",
       component: PostDetails,
       name: "postDetails",
-      props: true,
+      // props: true,
     },
 
     { path: "/:pathMatch(.*)*", name: "NotFound", component: NotFound },

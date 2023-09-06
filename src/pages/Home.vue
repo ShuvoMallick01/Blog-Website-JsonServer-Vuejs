@@ -1,7 +1,7 @@
 <template>
-  <!-- <Loading v-if="loading"></Loading> -->
+  <Loading v-if="loading"></Loading>
 
-  <div class="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+  <div class="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3" v-else>
     <div
       class="px-5 py-4 border border-gray-300 shadow-sm rounded-xl shadow-slate-100"
       v-for="post in posts"
@@ -32,21 +32,16 @@
         <i class="fa-solid fa-user"></i>
         <div>
           <i class="fa-regular fa-clock me-2"></i
-          ><span>{{ post.createdAt }}</span>
+          ><span>{{
+            new Date(post.createdAt).toLocaleDateString(undefined, {
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+            })
+          }}</span>
         </div>
       </div>
 
-      <!-- <div
-        class="inline-flex items-center gap-1 pt-1 text-sm font-medium text-slate-800"
-      >
-        {{
-          new Date(post.createAt).tolocaleDateString(undefined, {
-            year: "numeric",
-            month: "short",
-            day: "numeric",
-          })
-        }}
-      </div> -->
       <!-- {{ getPosts() }} {{ posts }} -->
     </div>
   </div>
@@ -62,15 +57,18 @@ export default {
 
   data() {
     return {
-      loading: false,
+      loading: true,
     };
   },
 
   async mounted() {
     try {
+      this.loading = true;
       await this.getPosts();
     } catch (e) {
       console.log(e);
+    } finally {
+      this.loading = false;
     }
   },
 

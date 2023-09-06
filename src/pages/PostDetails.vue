@@ -1,14 +1,9 @@
 <template>
-  <button
-    class="bg-slate-200 text-slate-600 font-medium py-2 px-4 rounded-lg mb-5"
-    @click="$router.push({ path: '/', replace: true })"
-  >
-    Go Back
-  </button>
+  <Loading v-if="loading"></Loading>
 
-  <div v-if="post" class="border p-4">
-    <h1 class="text-2xl font-semibold text-slate-700 uppercase mt-5">
-      <span class="">Post No: {{ id }} | {{ post.title }}</span>
+  <div class="border p-5" v-else>
+    <h1 class="text-2xl font-semibold text-slate-700 uppercase">
+      <span class="">Post No: {{ post.id }} | {{ post.title }}</span>
     </h1>
 
     <ul class="mt-5">
@@ -32,61 +27,75 @@
     >
       Next
     </button>
-
-    <!-- <button
-      class="bg-slate-200 text-slate-600 font-medium py-2 px-4 rounded-lg"
-      @click="$router.back()"
-    >
-      Next
-    </button> -->
   </div>
 </template>
 
 <!-- FUNCTIONALITY -->
 <script>
-// import { posts } from "../data/posts";
+import { mapActions, mapState } from "pinia";
+import { usePostsStore } from "../store/posts";
+import Loading from "../components/Loading.vue";
 
 export default {
   // props: ["id"],
-  // data() {
-  //   return {
-  //     post: null,
-  //     postList: [...posts],
-  //   };
-  // },
+  components: { Loading },
 
-  props: ["id"],
+  data() {
+    return {
+      post: null,
+      loading: true,
+      id: null,
+    };
+  },
 
-  // methods: {
-  //   handleNext() {
-  //     if (this.postList.length > this.id) {
-  //       this.$router.push("/posts/" + (+this.id + 1));
-  //     } else {
-  //       this.$router.replace("/posts");
-  //     }
-  //   },
+  beforeRouteEnter(to, from, next) {
+    next(async (vm) => {
+      vm.loading = true;
+      let post = await vm.getPost(to.params.id);
 
-  //   handlePrevious() {
-  //     if (this.id > 1) {
-  //       this.$router.push("/posts/" + (+this.id - 1));
-  //     } else {
-  //       this.$router.replace("/posts");
-  //     }
-  //   },
-  // },
+      if (post) {
+        vm.post = post;
+      } else {
+        vm.$router.replace("/");
+      }
+      console.log(to.params.id, vm.post);
+      vm.loading = false;
+    });
+  },
 
-  // beforeRouteEnter(to, from, next) {
-  //   next((vm) => {
-  //     vm.post = vm.postList.find((item) => item.id === +to.params.id);
-  //   });
-  // },
+  async beforeRouteUpdate(to, from) {
+    this.loading = true;
+    let post = await this.getPost(to.params.id);
+    if (post) {
+      this.post = post;
+    } else {
+      this.$router.replace("/");
+    }
+    this.loading = false;
+  },
 
-  // beforeRouteUpdate(to, from) {
-  //   this.post = this.postList.find((item) => item.id === +to.params.id);
-  // },
+  methods: {
+    ...mapActions(usePostsStore, ["getPost"]),
 
-  // beforeRouteLeave(to, from) {
-  //   // this.post = this.postList.find((item) => item.id === +this.id);
-  // },
+    handleNext() {
+      // if (this.posts.length > this.post.id) {
+      //   this.$router.push("/posts/" + (+this.post.id + 1));
+      // } else {
+      //   this.$router.replace("/");
+      // }
+
+      this.$router.push("/posts/" + (+this.post.id + 1));
+    },
+
+    handlePrevious() {
+      // if (this.id > 1) {
+      //   this.$router.push("/posts/" + (+this.post.id - 1));
+      // } else {
+      //   this.$router.replace("/posts");
+      // }
+
+      this.$router.push("/posts/" + (+this.post.id - 1));
+    },
+  },
 };
 </script>
