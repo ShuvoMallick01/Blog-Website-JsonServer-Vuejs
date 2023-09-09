@@ -72,7 +72,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr class="border-b border-gray-200">
+        <tr class="border-b border-gray-200" v-for="post in posts">
           <th scope="row" class="px-6 py-4">
             <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike" />
           </th>
@@ -80,38 +80,19 @@
             scope="row"
             class="px-6 py-4 font-medium text-gray-900 xl:whitespace-nowrap bg-gray-50"
           >
-            Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+            {{ post.title }}
           </th>
           <td class="px-6 py-4 lg:w-80 xl:w-1/3 text-gray-900">
-            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Officia id
-            veniam aliquam earum aliquid porro dolor itaque
+            {{ post.body.substring(0, 100) }}
+            {{ post.body.length > 100 ? "..." : "" }}
           </td>
-          <td class="px-6 py-4 bg-gray-50 text-gray-900 xl:w-52">Laptop</td>
-          <td class="px-6 py-4 text-gray-900 xl:w-52">$2999</td>
+          <td class="px-6 py-4 bg-gray-50 text-gray-900 xl:w-52">
+            {{ post.published ? "Published" : "Draft" }}
+          </td>
+          <td class="px-6 py-4 text-gray-900 xl:w-52">{{ post.createdBy }}</td>
           <td
             class="px-6 py-4 bg-gray-50 text-gray-900 whitespace-nowrap xl:w-52"
           >
-            <a href="#">Edit</a> <a href="#">Delete</a>
-          </td>
-        </tr>
-
-        <tr class="border-b border-gray-200">
-          <th scope="row" class="px-6 py-4">
-            <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike" />
-          </th>
-          <th
-            scope="row"
-            class="px-6 py-4 font-medium text-gray-900 xl:whitespace-nowrap bg-gray-50"
-          >
-            Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-          </th>
-          <td class="px-6 py-4 lg:w-80 xl:w-1/3 text-gray-900">
-            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Officia id
-            veniam aliquam earum aliquid porro dolor itaque
-          </td>
-          <td class="px-6 py-4 bg-gray-50 text-gray-900">Laptop</td>
-          <td class="px-6 py-4 text-gray-900">$2999</td>
-          <td class="px-6 py-4 bg-gray-50 text-gray-900 whitespace-nowrap">
             <a href="#">Edit</a> <a href="#">Delete</a>
           </td>
         </tr>
@@ -121,15 +102,27 @@
 </template>
 
 <script>
+import { mapActions } from "pinia";
+import { usePostsStore } from "../store/posts";
 // import postList from "../data/posts";
 // import { posts } from "../data/posts";
 
 export default {
   data() {
     return {
-      // postList: [...posts],
-      // postList,
+      posts: [],
     };
+  },
+
+  methods: {
+    ...mapActions(usePostsStore, ["getPostsByUser"]),
+  },
+
+  beforeRouteEnter(to, form, next) {
+    next(async (vm) => {
+      let data = await vm.getPostsByUser();
+      vm.posts = data;
+    });
   },
 };
 </script>

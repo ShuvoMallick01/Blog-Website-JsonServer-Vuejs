@@ -48,5 +48,22 @@ export const usePostsStore = defineStore("posts", {
         return await res.json();
       }
     },
+
+    async getPostsByUser() {
+      const { user } = useAuthStore();
+
+      const res = await fetch(`http://localhost:5000/posts/user`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.accessToken}`,
+        },
+      });
+
+      if (res.ok && res.status === 200) {
+        return await res.json();
+      } else {
+        return null;
+      }
+    },
   },
 });
