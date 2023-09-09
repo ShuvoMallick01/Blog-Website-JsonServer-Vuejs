@@ -11,7 +11,7 @@
           >Title</label
         >
         <input
-          v-model="title"
+          v-model="inputFields.title"
           type="text"
           id="name"
           name="name"
@@ -27,7 +27,7 @@
           >Description</label
         >
         <textarea
-          v-model="description"
+          v-model="inputFields.body"
           id="description"
           name="description"
           rows="4"
@@ -43,7 +43,7 @@
           >Tags</label
         >
         <input
-          v-model="tags"
+          v-model="inputFields.tags"
           type="text"
           id="tags"
           name="tags"
@@ -65,9 +65,47 @@
 
 <!-- FUUNCTIONALITY -->
 <script>
+import { mapActions, mapState } from "pinia";
+import { usePostsStore } from "../store/posts";
+import { useToast } from "vue-toastification";
+
+const toast = useToast();
+
 export default {
   data() {
-    return {};
+    return {
+      inputFields: {
+        title: "",
+        body: "",
+        tags: "",
+      },
+    };
+  },
+
+  methods: {
+    async handleSubmit() {
+      try {
+        await this.createPost({
+          title: this.inputFields.title,
+          body: this.inputFields.body,
+          tags: this.inputFields.tags.split(",").map((item) => item.trim()),
+        });
+
+        if (!this.error) {
+          toast.success("Successfully Created Post");
+
+          this.$router.replace("/");
+        }
+      } catch (error) {
+        toast.error("An error occurred.");
+      }
+    },
+
+    ...mapActions(usePostsStore, ["createPost"]),
+  },
+
+  computed: {
+    ...mapState(usePostsStore, ["error"]),
   },
 };
 </script>
