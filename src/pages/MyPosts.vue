@@ -89,7 +89,9 @@
           <td class="px-6 py-4 bg-gray-50 text-gray-900 xl:w-52">
             {{ post.published ? "Published" : "Draft" }}
           </td>
-          <td class="px-6 py-4 text-gray-900 xl:w-52">{{ post.createdBy }}</td>
+          <td class="px-6 py-4 text-gray-900 xl:w-52 whitespace-nowrap">
+            {{ formatDate(post.createdAt) }}
+          </td>
           <td
             class="px-6 py-4 bg-gray-50 text-gray-900 whitespace-nowrap xl:w-52"
           >
@@ -104,6 +106,7 @@
 <script>
 import { mapActions } from "pinia";
 import { usePostsStore } from "../store/posts";
+import { format } from "date-fns";
 // import postList from "../data/posts";
 // import { posts } from "../data/posts";
 
@@ -115,6 +118,10 @@ export default {
   },
 
   methods: {
+    formatDate(date) {
+      return format(new Date(date), "dd MMM yyyy");
+    },
+
     ...mapActions(usePostsStore, ["getPostsByUser"]),
   },
 
