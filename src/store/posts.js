@@ -69,6 +69,8 @@ export const usePostsStore = defineStore("posts", {
     async editPost(id, data) {
       const { user } = useAuthStore();
 
+      console.log(id, data);
+
       const res = await fetch(`http://localhost:5000/posts/${id}`, {
         method: "PUT",
         body: JSON.stringify(data),

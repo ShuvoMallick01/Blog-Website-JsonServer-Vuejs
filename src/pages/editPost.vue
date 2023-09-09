@@ -4,7 +4,11 @@
       Edit Post
     </h3>
 
-    <Form :inputFields="inputFields" :handleSubmit="handleSubmit"></Form>
+    <Form
+      :inputFields="inputFields"
+      :handleSubmit="handleSubmit"
+      :title="title"
+    ></Form>
   </section>
 </template>
 
@@ -22,6 +26,7 @@ const toast = useToast();
 export default {
   data() {
     return {
+      title: "Update Post",
       editId: null,
       inputFields: {
         title: "",
