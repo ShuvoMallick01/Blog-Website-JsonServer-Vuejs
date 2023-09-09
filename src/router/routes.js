@@ -8,6 +8,7 @@ import MyPosts from "../pages/MyPosts.vue";
 import PostDetails from "../pages/PostDetails.vue";
 import Login from "../pages/Login.vue";
 import Register from "../pages/Register.vue";
+import editPost from "../pages/editPost.vue";
 import { useAuthStore } from "../store/auth";
 
 export const router = createRouter({
@@ -50,6 +51,12 @@ export const router = createRouter({
       path: "/create-post",
       component: CreatePost,
       name: "createpost",
+      meta: { requireAuth: true },
+    },
+    {
+      path: "/edit-post/:id",
+      component: editPost,
+      name: "editpost",
       meta: { requireAuth: true },
     },
 

@@ -95,7 +95,16 @@
           <td
             class="px-6 py-4 bg-gray-50 text-gray-900 whitespace-nowrap xl:w-52"
           >
-            <a href="#">Edit</a> <a href="#">Delete</a>
+            <router-link
+              :to="`/edit-post/${post.id}`"
+              class="hover:text-red-600 me-2 hover:font-medium transition-all duration-300"
+              >Edit</router-link
+            >
+            <a
+              href="#"
+              class="hover:text-red-600 me-2 hover:font-medium transition-all duration-300"
+              >Delete</a
+            >
           </td>
         </tr>
       </tbody>
