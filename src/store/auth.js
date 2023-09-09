@@ -55,6 +55,11 @@ export const useAuthStore = defineStore("authStore", {
         this.error = await response.json();
       }
     },
+
+    hanleLogout() {
+      this.user = "";
+      localStorage.removeItem("user");
+    },
   },
 
   getters: {

@@ -41,13 +41,13 @@ export const router = createRouter({
       name: "postDetails",
     },
     {
-      path: "/myposts",
+      path: "/my-post",
       component: MyPosts,
       name: "myposts",
       meta: { requireAuth: true },
     },
     {
-      path: "/createpost",
+      path: "/create-post",
       component: CreatePost,
       name: "createpost",
       meta: { requireAuth: true },

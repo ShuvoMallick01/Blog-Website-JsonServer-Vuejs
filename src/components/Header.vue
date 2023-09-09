@@ -9,35 +9,23 @@
       </router-link>
 
       <div class="">
-        <ul class="font-medium flex text-gray-400 gap-6 md:gap-8">
-          <li>
-            <router-link to="/" class="hover:text-slate-300 duration-300"
-              >Home</router-link
-            >
-          </li>
-          <li>
-            <router-link to="/login" class="hover:text-slate-300 duration-300"
-              >Login</router-link
-            >
-          </li>
-          <li>
+        <ul class="font-medium flex text-gray-400 gap-5 md:gap-7 uppercase">
+          <li
+            v-for="menuItem in filterMenu"
+            :key="menuItem"
+            :class="{ 'text-slate-300': menuItem.path === active }"
+          >
             <router-link
-              to="/register"
+              :to="menuItem.path"
               class="hover:text-slate-300 duration-300"
-              >Register</router-link
+              >{{ menuItem.title }}</router-link
             >
           </li>
-          <li>
-            <router-link to="/myposts" class="hover:text-slate-300 duration-300"
-              >My Post</router-link
-            >
-          </li>
-          <li>
-            <router-link
-              to="/createpost"
-              class="hover:text-slate-300 duration-300"
-              >Create Post</router-link
-            >
+
+          <li v-if="isAuthenticated">
+            <button @click="logout()" class="hover:text-slate-300 duration-300">
+              LOGOUT
+            </button>
           </li>
         </ul>
       </div>
@@ -46,5 +34,48 @@
 </template>
 
 <script>
-export default {};
+import { mapActions, mapState } from "pinia";
+import { useAuthStore } from "../store/auth";
+export default {
+  data() {
+    return {
+      menu: [
+        { title: "Home", path: "/", private: false },
+        { title: "Login", path: "/login", private: false },
+        { title: "Register", path: "/register", private: false },
+        { title: "My Post", path: "/my-post", private: true },
+        { title: "Create Post", path: "/create-post", private: true },
+      ],
+    };
+  },
+
+  methods: {
+    logout() {
+      this.hanleLogout();
+      return this.$router.push("/login");
+    },
+
+    ...mapActions(useAuthStore, ["hanleLogout"]),
+  },
+
+  computed: {
+    active() {
+      return this.$route.path;
+    },
+
+    filterMenu() {
+      let menu = [];
+
+      if (this.isAuthenticated) {
+        menu = this.menu.filter((item) => item.private);
+      } else {
+        menu = this.menu.filter((item) => !item.private);
+      }
+
+      return menu;
+    },
+
+    ...mapState(useAuthStore, ["isAuthenticated"]),
+  },
+};
 </script>
