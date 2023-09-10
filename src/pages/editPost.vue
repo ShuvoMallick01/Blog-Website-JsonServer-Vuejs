@@ -41,7 +41,7 @@ export default {
       let post = await vm.getPost(to.params.id);
       vm.inputFields.title = post.title;
       vm.inputFields.body = post.body;
-      vm.inputFields.tags = post.tags;
+      vm.inputFields.tags = String(post.tags);
       vm.editId = post.id;
     });
   },
@@ -50,6 +50,15 @@ export default {
     ...mapActions(usePostsStore, ["getPost", "editPost"]),
 
     async handleSubmit() {
+      console.log(this.inputFields, this.editId);
+
+      // await this.editPost(this.editId, {
+      //   title: this.inputFields.title,
+      //   body: this.inputFields.body,
+      //   tags: this.inputFields.tags.split(",").map((item) => item.trim()),
+      // });
+      // console.log("Inside Try");
+
       try {
         await this.editPost(this.editId, {
           title: this.inputFields.title,
@@ -59,40 +68,13 @@ export default {
 
         if (!this.error) {
           toast.success("Successfully Updated Post");
-
-          // this.$router.replace("/my-post");
+          this.$router.replace("/my-post");
         }
       } catch (error) {
         toast.error("An error occurred.");
       }
     },
   },
-
-  // methods: {
-  //   async handleSubmit() {
-  //     try {
-  //       await this.createPost({
-  //         title: this.inputFields.title,
-  //         body: this.inputFields.body,
-  //         tags: this.inputFields.tags.split(",").map((item) => item.trim()),
-  //       });
-
-  //       if (!this.error) {
-  //         toast.success("Successfully Created Post");
-
-  //         this.$router.replace("/");
-  //       }
-  //     } catch (error) {
-  //       toast.error("An error occurred.");
-  //     }
-  //   },
-
-  //   ...mapActions(usePostsStore, ["createPost"]),
-  // },
-
-  // computed: {
-  //   ...mapState(usePostsStore, ["error"]),
-  // },
 
   components: {
     Form,

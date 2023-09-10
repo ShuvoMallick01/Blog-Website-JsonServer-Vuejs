@@ -19,7 +19,7 @@ export const usePostsStore = defineStore("posts", {
 
     async getPost(id) {
       const response = await fetch(`http://localhost:5000/posts/${id}`);
-      console.log(response.ok);
+
       if (response.ok && response.status === 200) {
         return await response.json();
       } else {
@@ -68,11 +68,8 @@ export const usePostsStore = defineStore("posts", {
 
     async editPost(id, data) {
       const { user } = useAuthStore();
-
-      console.log(id, data);
-
-      const res = await fetch(`http://localhost:5000/posts/${id}`, {
-        method: "PUT",
+      const res = await fetch(`http://localhost:5000/600/posts/${id}`, {
+        method: "PATCH",
         body: JSON.stringify(data),
         headers: {
           "Content-Type": "application/json",
@@ -80,10 +77,9 @@ export const usePostsStore = defineStore("posts", {
         },
       });
 
-      if (res.ok && res.status === 201) {
-        await res.json();
+      if (res.ok && res.status === 200) {
         this.error = "";
-        return;
+        return await res.json();
       } else {
         this.error = await res.json();
         return await res.json();
