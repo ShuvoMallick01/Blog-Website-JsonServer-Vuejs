@@ -85,5 +85,24 @@ export const usePostsStore = defineStore("posts", {
         return await res.json();
       }
     },
+
+    async deletePost(id) {
+      const { user } = useAuthStore();
+
+      const res = await fetch(`http://localhost:5000/600/posts/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${user.accessToken}`,
+        },
+      });
+
+      if (res.ok && res.status === 200) {
+        this.error = "";
+        return await res.json();
+      } else {
+        this.error = await res.json();
+        return await res.json();
+      }
+    },
   },
 });

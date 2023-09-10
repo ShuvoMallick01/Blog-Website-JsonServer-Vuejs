@@ -33,12 +33,6 @@
           placeholder="Search Mockups, Logos..."
           required
         />
-        <!-- <button
-          type="submit"
-          class="text-white absolute right-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-        >
-          Search
-        </button> -->
       </div>
     </form>
 
@@ -71,53 +65,25 @@
           </th>
         </tr>
       </thead>
+
       <tbody>
-        <tr class="border-b border-gray-200" v-for="post in posts">
-          <th scope="row" class="px-6 py-4">
-            <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike" />
-          </th>
-          <th
-            scope="row"
-            class="px-6 py-4 font-medium text-gray-900 xl:whitespace-nowrap bg-gray-50"
-          >
-            {{ post.title }}
-          </th>
-          <td class="px-6 py-4 lg:w-80 xl:w-1/3 text-gray-900">
-            {{ post.body.substring(0, 100) }}
-            {{ post.body.length > 100 ? "..." : "" }}
-          </td>
-          <td class="px-6 py-4 bg-gray-50 text-gray-900 xl:w-52">
-            {{ post.published ? "Published" : "Draft" }}
-          </td>
-          <td class="px-6 py-4 text-gray-900 xl:w-52 whitespace-nowrap">
-            {{ formatDate(post.createdAt) }}
-          </td>
-          <td
-            class="px-6 py-4 bg-gray-50 text-gray-900 whitespace-nowrap xl:w-52"
-          >
-            <router-link
-              :to="`/edit-post/${post.id}`"
-              class="hover:text-red-600 me-2 hover:font-medium transition-all duration-300"
-              >Edit</router-link
-            >
-            <a
-              href="#"
-              class="hover:text-red-600 me-2 hover:font-medium transition-all duration-300"
-              >Delete</a
-            >
-          </td>
-        </tr>
+        <PostTableRow
+          :posts="posts"
+          :formatDate="formatDate"
+          :handleDeletePost="handleDeletePost"
+        ></PostTableRow>
       </tbody>
     </table>
   </div>
 </template>
 
 <script>
-import { mapActions } from "pinia";
+import { mapActions, mapState } from "pinia";
 import { usePostsStore } from "../store/posts";
 import { format } from "date-fns";
-// import postList from "../data/posts";
-// import { posts } from "../data/posts";
+import PostTableRow from "../components/PostTableRow.vue";
+import { useToast } from "vue-toastification";
+const toast = useToast();
 
 export default {
   data() {
@@ -127,11 +93,27 @@ export default {
   },
 
   methods: {
+    async handleDeletePost(id) {
+      try {
+        await this.deletePost(id);
+
+        console.log(this.error);
+        if (!this.error) {
+          toast.success("Successfully Post Delete!");
+          this.$router.push("/");
+        }
+      } catch (error) {
+        if (this.error) {
+          toast.error("Someting Wents Wrong");
+        }
+      }
+    },
+
     formatDate(date) {
       return format(new Date(date), "dd MMM yyyy");
     },
 
-    ...mapActions(usePostsStore, ["getPostsByUser"]),
+    ...mapActions(usePostsStore, ["getPostsByUser", "deletePost"]),
   },
 
   beforeRouteEnter(to, form, next) {
@@ -139,6 +121,14 @@ export default {
       let data = await vm.getPostsByUser();
       vm.posts = data;
     });
+  },
+
+  computed: {
+    ...mapState(usePostsStore, ["error"]),
+  },
+
+  components: {
+    PostTableRow,
   },
 };
 </script>
