@@ -104,5 +104,32 @@ export const usePostsStore = defineStore("posts", {
         return await res.json();
       }
     },
+
+    async filterPost(searchInput) {
+      const { user } = useAuthStore();
+      console.log(searchInput);
+
+      const res = await fetch(
+        `http://localhost:5000/posts?title_like=${searchInput}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.accessToken}`,
+          },
+        }
+      );
+
+      // console.log(await res.json());
+      // return await res.json();
+
+      if (res.ok && res.status === 200) {
+        this.error = "";
+        return await res.json();
+      } else {
+        this.error = await res.json();
+        return await res.json();
+      }
+    },
   },
 });

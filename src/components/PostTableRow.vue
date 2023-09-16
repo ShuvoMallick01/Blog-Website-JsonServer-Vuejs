@@ -1,5 +1,7 @@
 <template>
-  <tr class="border-b border-gray-200" v-for="post in posts">
+  <!-- <Loading v-if="loading"></Loading> -->
+
+  <tr class="border-b border-gray-200" v-for="post in posts" :key="post.id">
     <th scope="row" class="px-6 py-4">
       <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike" />
     </th>
@@ -36,6 +38,8 @@
 </template>
 
 <script>
+// import Loading from "../components/Loading.vue";
+
 export default {
   props: {
     posts: {
@@ -53,6 +57,15 @@ export default {
       type: Function,
       required: true,
     },
+
+    // loading: {
+    //   type: Boolean,
+    //   required: true,
+    // },
   },
+
+  // components: {
+  //   Loading,
+  // },
 };
 </script>

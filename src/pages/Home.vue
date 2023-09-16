@@ -41,8 +41,6 @@
           }}</span>
         </div>
       </div>
-
-      <!-- {{ getPosts() }} {{ posts }} -->
     </div>
   </div>
 </template>

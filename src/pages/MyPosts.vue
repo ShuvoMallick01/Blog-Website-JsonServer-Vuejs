@@ -27,6 +27,7 @@
           </svg>
         </div>
         <input
+          v-model="searchInput"
           type="search"
           id="default-search"
           class="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:border-gray-400 focus:ring-0 focus:outline-none"
@@ -35,6 +36,8 @@
         />
       </div>
     </form>
+
+    <!-- <Loading v-if="loading"></Loading> -->
 
     <!-- Table -->
     <table
@@ -68,12 +71,13 @@
 
       <tbody>
         <PostTableRow
-          :posts="posts"
+          :posts="handleFilterPost"
           :formatDate="formatDate"
           :handleDeletePost="handleDeletePost"
         ></PostTableRow>
       </tbody>
     </table>
+    {{ handleFilterPost() }}
   </div>
 </template>
 
@@ -82,6 +86,7 @@ import { mapActions, mapState } from "pinia";
 import { usePostsStore } from "../store/posts";
 import { format } from "date-fns";
 import PostTableRow from "../components/PostTableRow.vue";
+import Loading from "../components/Loading.vue";
 import { useToast } from "vue-toastification";
 const toast = useToast();
 
@@ -89,6 +94,9 @@ export default {
   data() {
     return {
       posts: [],
+      searchInput: null,
+      loading: false,
+      // filterPostList: [],
     };
   },
 
@@ -96,7 +104,6 @@ export default {
     async handleDeletePost(id) {
       try {
         await this.deletePost(id);
-
         console.log(this.error);
         if (!this.error) {
           toast.success("Successfully Post Delete!");
@@ -113,7 +120,32 @@ export default {
       return format(new Date(date), "dd MMM yyyy");
     },
 
-    ...mapActions(usePostsStore, ["getPostsByUser", "deletePost"]),
+    ...mapActions(usePostsStore, [
+      "getPostsByUser",
+      "deletePost",
+      "filterPost",
+    ]),
+
+    async handleFilterPost() {
+      let filterPostList = [...this.posts];
+      // console.log(filterPostList);
+
+      try {
+        // this.loading = true;
+        let data = await this.filterPost(this.searchInput);
+        filterPostList = [...data];
+        return filterPostList;
+      } catch (error) {
+        console.log(error);
+      } finally {
+        // this.loading = false;
+      }
+      return filterPostList;
+    },
+  },
+
+  computed: {
+    ...mapState(usePostsStore, ["error", "filterPostList"]),
   },
 
   beforeRouteEnter(to, form, next) {
@@ -123,12 +155,9 @@ export default {
     });
   },
 
-  computed: {
-    ...mapState(usePostsStore, ["error"]),
-  },
-
   components: {
     PostTableRow,
+    Loading,
   },
 };
 </script>
