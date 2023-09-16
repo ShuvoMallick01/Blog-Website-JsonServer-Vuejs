@@ -71,7 +71,7 @@
 
       <tbody>
         <PostTableRow
-          :posts="handleFilterPost"
+          :posts="posts"
           :formatDate="formatDate"
           :handleDeletePost="handleDeletePost"
         ></PostTableRow>
