@@ -37,11 +37,12 @@
       </div>
     </form>
 
-    <!-- <Loading v-if="loading"></Loading> -->
+    <Loading v-if="loading"></Loading>
 
     <!-- Table -->
     <table
       class="w-full text-sm text-left text-gray-500 dark:text-gray-400 overflow-x-auto"
+      else
     >
       <thead class="text-xs text-gray-700 uppercase dark:text-gray-400">
         <tr>
@@ -71,13 +72,12 @@
 
       <tbody>
         <PostTableRow
-          :posts="posts"
+          :posts="filterPostList.length !== 0 ? filterPostList : posts"
           :formatDate="formatDate"
           :handleDeletePost="handleDeletePost"
         ></PostTableRow>
       </tbody>
     </table>
-    {{ handleFilterPost() }}
   </div>
 </template>
 
@@ -96,7 +96,7 @@ export default {
       posts: [],
       searchInput: null,
       loading: false,
-      // filterPostList: [],
+      filterPostList: [],
     };
   },
 
@@ -127,25 +127,32 @@ export default {
     ]),
 
     async handleFilterPost() {
-      let filterPostList = [...this.posts];
+      this.filterPostList = [...this.posts];
       // console.log(filterPostList);
 
       try {
-        // this.loading = true;
+        this.loading = true;
         let data = await this.filterPost(this.searchInput);
-        filterPostList = [...data];
-        return filterPostList;
+        this.filterPostList = [...data];
+        console.log(this.filterPostList);
+        return;
       } catch (error) {
         console.log(error);
       } finally {
-        // this.loading = false;
+        this.loading = false;
       }
-      return filterPostList;
+    },
+  },
+
+  watch: {
+    searchInput(newSearch, oldSearch) {
+      this.searchInput = newSearch;
+      this.handleFilterPost();
     },
   },
 
   computed: {
-    ...mapState(usePostsStore, ["error", "filterPostList"]),
+    ...mapState(usePostsStore, ["error"]),
   },
 
   beforeRouteEnter(to, form, next) {
