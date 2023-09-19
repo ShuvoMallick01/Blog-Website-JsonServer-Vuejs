@@ -1,4 +1,4 @@
-# Blog-Website-using-Json-Server-Vuejs
+# Blog-Website-using-Json-Server-Vuejs-Composition-API
 
 Live: https://blog-website-json-server-vuejs.netlify.app/
 

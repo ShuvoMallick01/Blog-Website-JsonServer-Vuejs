@@ -45,37 +45,25 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import { ref, onMounted } from "vue";
 import Loading from "../components/Loading.vue";
 import { mapActions, mapState } from "pinia";
 import { usePostsStore } from "../store/posts";
 
-export default {
-  components: { Loading },
+const store = usePostsStore();
+const posts = store.posts;
 
-  data() {
-    return {
-      loading: true,
-    };
-  },
+const loading = ref(true);
 
-  async mounted() {
-    try {
-      this.loading = true;
-      await this.getPosts();
-    } catch (e) {
-      console.log(e);
-    } finally {
-      this.loading = false;
-    }
-  },
-
-  computed: {
-    ...mapState(usePostsStore, ["posts"]),
-  },
-
-  methods: {
-    ...mapActions(usePostsStore, ["getPosts"]),
-  },
-};
+onMounted(async () => {
+  try {
+    loading.value = true;
+    await store.getPosts();
+  } catch (e) {
+    console.log(e);
+  } finally {
+    loading.value = false;
+  }
+});
 </script>
