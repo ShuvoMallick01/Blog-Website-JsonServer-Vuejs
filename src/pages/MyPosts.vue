@@ -37,12 +37,9 @@
       </div>
     </form>
 
-    <Loading v-if="loading"></Loading>
-
     <!-- Table -->
     <table
       class="w-full text-sm text-left text-gray-500 dark:text-gray-400 overflow-x-auto"
-      else
     >
       <thead class="text-xs text-gray-700 uppercase dark:text-gray-400">
         <tr>
@@ -69,13 +66,24 @@
           </th>
         </tr>
       </thead>
+      <Loading v-if="loading"></Loading>
 
-      <tbody>
+      <tbody else>
         <PostTableRow
-          :posts="filterPostList.length !== 0 ? filterPostList : posts"
+          v-if="filterPostList.length > 0"
+          :posts="filterPostList"
           :formatDate="formatDate"
           :handleDeletePost="handleDeletePost"
         ></PostTableRow>
+
+        <tr
+          v-else
+          class="mx-auto text-center py-10 text-slate-400 font-light text-lg"
+        >
+          <td class="py-10 text-slate-400 font-light text-lg" colspan="6">
+            Not found any result
+          </td>
+        </tr>
       </tbody>
     </table>
   </div>
@@ -127,9 +135,7 @@ export default {
     ]),
 
     async handleFilterPost() {
-      this.filterPostList = [...this.posts];
       // console.log(filterPostList);
-
       try {
         this.loading = true;
         let data = await this.filterPost(this.searchInput);
@@ -159,6 +165,7 @@ export default {
     next(async (vm) => {
       let data = await vm.getPostsByUser();
       vm.posts = data;
+      vm.filterPostList = vm.posts;
     });
   },
 

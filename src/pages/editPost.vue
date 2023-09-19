@@ -7,7 +7,8 @@
     <Form
       :inputFields="inputFields"
       :handleSubmit="handleSubmit"
-      :title="title"
+      :firstBtnTitle="firstBtnTitle"
+      :secondBtnTitle="secondBtnTitle"
     ></Form>
   </section>
 </template>
@@ -24,12 +25,14 @@ const toast = useToast();
 export default {
   data() {
     return {
-      title: "Update Post",
+      firstBtnTitle: "Update Post",
+      secondBtnTitle: "",
       editId: null,
       inputFields: {
         title: "",
         body: "",
         tags: "",
+        published: null,
       },
     };
   },
@@ -40,36 +43,51 @@ export default {
       vm.inputFields.title = post.title;
       vm.inputFields.body = post.body;
       vm.inputFields.tags = String(post.tags);
+      vm.inputFields.published = post.published;
       vm.editId = post.id;
+      vm.secondBtnTitle = post.published ? "Save Draft" : "Publish";
     });
   },
 
   methods: {
     ...mapActions(usePostsStore, ["getPost", "editPost"]),
 
-    async handleSubmit() {
+    async handleSubmit(event) {
+      console.log(event.submitter.name);
       console.log(this.inputFields, this.editId);
 
-      // await this.editPost(this.editId, {
-      //   title: this.inputFields.title,
-      //   body: this.inputFields.body,
-      //   tags: this.inputFields.tags.split(",").map((item) => item.trim()),
-      // });
-      // console.log("Inside Try");
+      if (event.submitter.name === "updatepost") {
+        try {
+          await this.editPost(this.editId, {
+            title: this.inputFields.title,
+            body: this.inputFields.body,
+            tags: this.inputFields.tags.split(",").map((item) => item.trim()),
+            published: this.inputFields.published,
+          });
 
-      try {
-        await this.editPost(this.editId, {
-          title: this.inputFields.title,
-          body: this.inputFields.body,
-          tags: this.inputFields.tags.split(",").map((item) => item.trim()),
-        });
-
-        if (!this.error) {
-          toast.success("Successfully Updated Post");
-          this.$router.replace("/my-post");
+          if (!this.error) {
+            toast.success("Successfully Updated Post");
+            this.$router.replace("/my-post");
+          }
+        } catch (error) {
+          toast.error("An error occurred.");
         }
-      } catch (error) {
-        toast.error("An error occurred.");
+      } else {
+        try {
+          await this.editPost(this.editId, {
+            title: this.inputFields.title,
+            body: this.inputFields.body,
+            tags: this.inputFields.tags.split(",").map((item) => item.trim()),
+            published: !this.inputFields.published,
+          });
+
+          if (!this.error) {
+            toast.success("Post Save Successfully");
+            this.$router.replace("/my-post");
+          }
+        } catch (error) {
+          toast.error("An error occurred.");
+        }
       }
     },
   },

@@ -37,51 +37,28 @@
       "published": true
     },
     {
-      "title": "What is Lorem Ipsum?",
-      "body": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.\n\n",
+      "title": "New Post",
+      "body": "New Post body",
       "tags": [
-        "javascript",
-        "react",
-        "vue"
+        "post",
+        "new"
       ],
-      "createdAt": 1694343671629,
+      "published": false,
+      "createdAt": 1695032347127,
       "userId": 1,
       "id": 7
     },
     {
-      "title": "sdfsfsa",
-      "body": "sdfsadf",
+      "title": "Post Draft",
+      "body": "Post Draft save",
       "tags": [
-        "tag",
-        "tag"
+        "draft",
+        "save"
       ],
-      "createdAt": 1694343679358,
+      "published": true,
+      "createdAt": 1695032367330,
       "userId": 1,
       "id": 8
-    },
-    {
-      "title": "Shuvo Post",
-      "body": "Shuvo Post",
-      "tags": [
-        "js",
-        "vue",
-        "react"
-      ],
-      "createdAt": 1694343883502,
-      "userId": 1,
-      "id": 9
-    },
-    {
-      "title": "root New Edit",
-      "body": "root New Edit",
-      "tags": [
-        "javascript",
-        "react",
-        "vue"
-      ],
-      "createdAt": 1694887554662,
-      "userId": 1,
-      "id": 10
     }
   ]
 }

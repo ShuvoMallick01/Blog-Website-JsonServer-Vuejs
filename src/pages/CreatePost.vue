@@ -7,7 +7,8 @@
     <Form
       :inputFields="inputFields"
       :handleSubmit="handleSubmit"
-      :title="title"
+      :firstBtnTitle="firstBtnTitle"
+      :secondBtnTitle="secondBtnTitle"
     ></Form>
   </section>
 </template>
@@ -25,31 +26,54 @@ const toast = useToast();
 export default {
   data() {
     return {
-      title: "Create Post",
+      firstBtnTitle: "Create Post",
       inputFields: {
         title: "",
         body: "",
         tags: "",
       },
+      secondBtnTitle: "Save Draft",
     };
   },
 
   methods: {
-    async handleSubmit() {
-      try {
-        await this.createPost({
-          title: this.inputFields.title,
-          body: this.inputFields.body,
-          tags: this.inputFields.tags.split(",").map((item) => item.trim()),
-        });
+    async handleSubmit(event) {
+      console.log(event);
+      console.log(event.submitter.name);
+      if (event.submitter.name === "createpost") {
+        try {
+          await this.createPost({
+            title: this.inputFields.title,
+            body: this.inputFields.body,
+            tags: this.inputFields.tags.split(",").map((item) => item.trim()),
+            published: true,
+          });
 
-        if (!this.error) {
-          toast.success("Successfully Created Post");
+          if (!this.error) {
+            toast.success("Post Created Successfully");
 
-          this.$router.replace("/");
+            this.$router.replace("/");
+          }
+        } catch (error) {
+          toast.error("An error occurred.");
         }
-      } catch (error) {
-        toast.error("An error occurred.");
+      } else {
+        try {
+          await this.createPost({
+            title: this.inputFields.title,
+            body: this.inputFields.body,
+            tags: this.inputFields.tags.split(",").map((item) => item.trim()),
+            published: false,
+          });
+
+          if (!this.error) {
+            toast.success("Post saved successfully");
+
+            this.$router.replace("/");
+          }
+        } catch (error) {
+          toast.error("An error occurred.");
+        }
       }
     },
 
