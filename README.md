@@ -1,6 +1,6 @@
 # Blog-Website-using-Json-Server-Vuejs-Composition-API
 
-Live: https://blog-website-json-server-vuejs.netlify.app/
+Live: https://blog-site-jsnsvr-vuejs-compositionapi.netlify.app/
 
 This template should help get you started developing with Vue 3 in Vite.
 
