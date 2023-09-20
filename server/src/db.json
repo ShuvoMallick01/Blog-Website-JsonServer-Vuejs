@@ -5,6 +5,12 @@
       "password": "$2a$10$nx6pHZX.HIXQvRgROPdTfeLy067.Wes6JeEwVEM8Il2ZIRNlAokxG",
       "name": "Shuvo",
       "id": 1
+    },
+    {
+      "email": "shuvacse01@gmail.com",
+      "password": "$2a$10$jN7/k2ZYmcP9TubKIKwqieGLmbb5vFYXUAdS.pgN8RSBSlEKSg3uO",
+      "name": "root",
+      "id": 2
     }
   ],
   "posts": [

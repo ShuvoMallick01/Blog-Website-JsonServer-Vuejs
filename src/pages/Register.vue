@@ -84,57 +84,52 @@
 </template>
 
 <!-- FUUNCTIONALITY -->
-<script>
-import { mapActions, mapState } from "pinia";
+<script setup>
+import { ref } from "vue";
+import { storeToRefs } from "pinia";
 import { useAuthStore } from "../stores/AuthStore";
 import { useToast } from "vue-toastification";
+import { useRouter } from "vue-router";
+
 const toast = useToast();
+const store = useAuthStore();
+const { userRegistration } = store;
+const { error } = storeToRefs(store);
+const router = useRouter();
 
-export default {
-  data() {
-    return {
-      name: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
-    };
-  },
+// State
+const name = ref("");
+const email = ref("");
+const password = ref("");
+const confirmPassword = ref("");
 
-  methods: {
-    ...mapActions(useAuthStore, ["userRegistration"]),
+// Methods
+const handleSubmit = async () => {
+  if (password.value !== confirmPassword.value) {
+    // alert("Password Doesn't Match");
+    toast.error("Password Doesn't Match");
+    return;
+  }
 
-    async handleSubmit() {
-      if (this.password !== this.confirmPassword) {
-        // alert("Password Doesn't Match");
-        toast.error("Password Doesn't Match");
-        return;
-      }
+  await userRegistration({
+    name: name.value,
+    email: email.value,
+    password: password.value,
+  });
 
-      await this.userRegistration({
-        name: this.name,
-        email: this.email,
-        password: this.password,
-      });
+  if (error) {
+    // console.log(error);
+    toast.error(error);
+  } else {
+    toast.success("Registration Successfully!");
+    router.replace("/login");
+  }
 
-      if (this.error) {
-        // console.log(error);
-        toast.error(this.error);
-      } else {
-        toast.success("Registration Successfully!");
-        this.$router.replace("/login");
-      }
+  // console.log(this.name, this.email, this.password);
 
-      // console.log(this.name, this.email, this.password);
-
-      this.name = "";
-      this.email = "";
-      this.password = "";
-      this.confirmPassword = "";
-    },
-  },
-
-  computed: {
-    ...mapState(useAuthStore, ["user", "error"]),
-  },
+  name.value = "";
+  email.value = "";
+  password.value = "";
+  confirmPassword.value = "";
 };
 </script>

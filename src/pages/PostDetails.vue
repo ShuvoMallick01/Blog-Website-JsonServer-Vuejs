@@ -31,71 +31,68 @@
 </template>
 
 <!-- FUNCTIONALITY -->
-<script>
+<script setup>
+import { ref } from "vue";
 import { mapActions, mapState } from "pinia";
+import { useRouter } from "vue-router";
 import { usePostsStore } from "../stores/PostsStore";
 import Loading from "../components/Loading.vue";
 
-export default {
-  // props: ["id"],
-  components: { Loading },
+const router = useRouter();
+const store = usePostsStore();
 
-  data() {
-    return {
-      post: null,
-      loading: true,
-      id: null,
-    };
-  },
+// State
+const post = ref(null);
+const loading = ref(true);
+const id = ref(null);
 
-  beforeRouteEnter(to, from, next) {
-    next(async (vm) => {
-      vm.loading = true;
-      let post = await vm.getPost(to.params.id);
+// onBeforeRouteEnter(async (to, from, next) => {
+//   try {
+//     loading.value = true;
+//     let data = await store.getPost(to.params.id);
 
-      if (post) {
-        vm.post = post;
-      } else {
-        vm.$router.replace("/");
-      }
-      console.log(to.params.id, vm.post);
-      vm.loading = false;
-    });
-  },
+//     if (data) {
+//       post.value = data;
+//       loading.value = false;
+//     } else {
+//       router.replace("/");
+//     }
+//   } catch (error) {
+//     console.error(error);
+//     // router.replace("/");
+//   }
 
-  async beforeRouteUpdate(to, from) {
-    this.loading = true;
-    let post = await this.getPost(to.params.id);
-    if (post) {
-      this.post = post;
-    } else {
-      this.$router.replace("/");
-    }
-    this.loading = false;
-  },
+//   next();
+// });
 
-  methods: {
-    ...mapActions(usePostsStore, ["getPost"]),
+// onBeforeRouteUpdate= async(to, from) => {
+//   this.loading = true;
+//   let post = await this.getPost(to.params.id);
+//   if (post) {
+//     this.post = post;
+//   } else {
+//     this.$router.replace("/");
+//   }
+//   this.loading = false;
+// }
 
-    handleNext() {
-      // if (this.posts.length > this.post.id) {
-      //   this.$router.push("/posts/" + (+this.post.id + 1));
-      // } else {
-      //   this.$router.replace("/");
-      // }
+const handleNext = () => {
+  // if (this.posts.length > this.post.id) {
+  //   this.$router.push("/posts/" + (+this.post.id + 1));
+  // } else {
+  //   this.$router.replace("/");
+  // }
 
-      this.$router.push("/posts/" + (+this.post.id + 1));
-    },
+  router.push("/posts/" + (+post.value.id + 1));
+};
 
-    handlePrevious() {
-      // if (this.id > 1) {
-      //   this.$router.push("/posts/" + (+this.post.id - 1));
-      // } else {
-      //   this.$router.replace("/posts");
-      // }
+const handlePrevious = () => {
+  // if (this.id > 1) {
+  //   this.$router.push("/posts/" + (+this.post.id - 1));
+  // } else {
+  //   this.$router.replace("/posts");
+  // }
 
-      this.$router.push("/posts/" + (+this.post.id - 1));
-    },
-  },
+  router.push("/posts/" + (+post.value - 1));
 };
 </script>

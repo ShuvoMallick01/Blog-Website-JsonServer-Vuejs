@@ -12,6 +12,7 @@ export const useAuthStore = defineStore("authStore", () => {
 
   const userRegistration = async (data) => {
     console.log(data);
+
     const response = await fetch("http://localhost:5000/register", {
       method: "POST",
       body: JSON.stringify(data),
@@ -23,9 +24,9 @@ export const useAuthStore = defineStore("authStore", () => {
     //   console.log(response);
 
     if (response.ok && response.status === 201) {
-      const user = await response.json();
-      localStorage.setItem("user", JSON.stringify(user));
-      user.value = user;
+      const data = await response.json();
+      localStorage.setItem("user", JSON.stringify(data));
+      user.value = data;
     } else {
       error.value = await response.json();
     }
@@ -59,5 +60,11 @@ export const useAuthStore = defineStore("authStore", () => {
     return user.value ? true : false;
   });
 
-  return { useAuthStore, isAuthenticated, hanleLogout, userLogin };
+  return {
+    useAuthStore,
+    userRegistration,
+    isAuthenticated,
+    hanleLogout,
+    userLogin,
+  };
 });

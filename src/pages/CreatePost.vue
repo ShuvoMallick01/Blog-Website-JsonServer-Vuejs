@@ -14,78 +14,65 @@
 </template>
 
 <!-- FUUNCTIONALITY -->
-<script>
-import { mapActions, mapState } from "pinia";
+<script setup>
+import { ref, reactive } from "vue";
+import { storeToRefs } from "pinia";
 import { usePostsStore } from "../stores/PostsStore";
 import { useToast } from "vue-toastification";
-
 import Form from "../components/Form.vue";
+import { useRouter } from "vue-router";
 
 const toast = useToast();
+const store = usePostsStore();
+const router = useRouter();
+const { createPost } = store;
+const { error } = storeToRefs(store);
 
-export default {
-  data() {
-    return {
-      firstBtnTitle: "Create Post",
-      inputFields: {
-        title: "",
-        body: "",
-        tags: "",
-      },
-      secondBtnTitle: "Save Draft",
-    };
-  },
+// State
+const firstBtnTitle = ref("Create Post");
+const inputFields = reactive({
+  title: "",
+  body: "",
+  tags: "",
+});
+const secondBtnTitle = ref("Save Draft");
 
-  methods: {
-    async handleSubmit(event) {
-      console.log(event);
-      console.log(event.submitter.name);
-      if (event.submitter.name === "createpost") {
-        try {
-          await this.createPost({
-            title: this.inputFields.title,
-            body: this.inputFields.body,
-            tags: this.inputFields.tags.split(",").map((item) => item.trim()),
-            published: true,
-          });
+// Methods
+const handleSubmit = async (event) => {
+  console.log(event.submitter.name);
 
-          if (!this.error) {
-            toast.success("Post Created Successfully");
+  const postData = {
+    title: inputFields.title,
+    body: inputFields.body,
+    tags: inputFields.tags.split(",").map((item) => item.trim()),
+    published: true,
+  };
 
-            this.$router.replace("/");
-          }
-        } catch (error) {
-          toast.error("An error occurred.");
-        }
-      } else {
-        try {
-          await this.createPost({
-            title: this.inputFields.title,
-            body: this.inputFields.body,
-            tags: this.inputFields.tags.split(",").map((item) => item.trim()),
-            published: false,
-          });
-
-          if (!this.error) {
-            toast.success("Post saved successfully");
-
-            this.$router.replace("/");
-          }
-        } catch (error) {
-          toast.error("An error occurred.");
-        }
+  if (event.submitter.name === "createpost") {
+    try {
+      console.log("await createpost");
+      await createPost(postData);
+      console.log(error);
+      if (!error) {
+        toast.success("Post Created Successfully");
+        router.replace("/");
       }
-    },
+    } catch (error) {
+      toast.error("An error occurred.");
+    }
+  } else {
+    try {
+      postData.published = false;
+      await createPost(postData);
 
-    ...mapActions(usePostsStore, ["createPost"]),
-  },
+      if (!error) {
+        toast.success("Post saved successfully");
 
-  computed: {
-    ...mapState(usePostsStore, ["error"]),
-  },
-
-  components: {
-    Form,
-  },
+        router.replace("/");
+      }
+    } catch (error) {
+      toast.error("An error occurred.");
+    }
+  }
 };
 </script>

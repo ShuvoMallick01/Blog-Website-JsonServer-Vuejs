@@ -26,6 +26,8 @@ export const usePostsStore = defineStore("postsStore", () => {
   const createPost = async (data) => {
     const { user } = useAuthStore();
 
+    console.log("Call Function", data);
+
     const res = await fetch(`http://localhost:5000/posts`, {
       method: "POST",
       body: JSON.stringify(data),
@@ -37,6 +39,7 @@ export const usePostsStore = defineStore("postsStore", () => {
 
     if (res.ok && res.status === 201) {
       await res.json();
+      console.log("successfully");
       error.value = "";
       return;
     } else {
