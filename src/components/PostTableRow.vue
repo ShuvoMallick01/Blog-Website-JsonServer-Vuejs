@@ -37,35 +37,22 @@
   </tr>
 </template>
 
-<script>
-// import Loading from "../components/Loading.vue";
-
-export default {
-  props: {
-    posts: {
-      type: Array,
-      default: [],
-      required: true,
-    },
-
-    formatDate: {
-      type: Function,
-      required: true,
-    },
-
-    handleDeletePost: {
-      type: Function,
-      required: true,
-    },
-
-    // loading: {
-    //   type: Boolean,
-    //   required: true,
-    // },
+<script setup>
+defineProps({
+  posts: {
+    type: Array,
+    default: [],
+    required: true,
   },
 
-  // components: {
-  //   Loading,
-  // },
-};
+  formatDate: {
+    type: Function,
+    required: true,
+  },
+
+  handleDeletePost: {
+    type: Function,
+    required: true,
+  },
+});
 </script>

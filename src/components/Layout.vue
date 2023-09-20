@@ -14,14 +14,7 @@
 </template>
 
 <!-- FUNCTIONALITY -->
-<script>
+<script setup>
 import Header from "./Header.vue";
 import Footer from "./Footer.vue";
-
-export default {
-  components: {
-    Header,
-    Footer,
-  },
-};
 </script>

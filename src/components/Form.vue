@@ -69,33 +69,27 @@
 </template>
 
 <!-- FUUNCTIONALITY -->
-<script>
-export default {
-  data() {
-    return {};
+<script setup>
+defineProps({
+  firstBtnTitle: {
+    type: String,
+    default: "Button",
+    required: true,
+  },
+  secondBtnTitle: {
+    type: String,
+    default: "Button",
+    required: true,
+  },
+  inputFields: {
+    type: Object,
+    default: {},
+    required: true,
   },
 
-  props: {
-    firstBtnTitle: {
-      type: String,
-      default: "Button",
-      required: true,
-    },
-    secondBtnTitle: {
-      type: String,
-      default: "Button",
-      required: true,
-    },
-    inputFields: {
-      type: Object,
-      default: {},
-      required: true,
-    },
-
-    handleSubmit: {
-      type: Function,
-      required: true,
-    },
+  handleSubmit: {
+    type: Function,
+    required: true,
   },
-};
+});
 </script>
