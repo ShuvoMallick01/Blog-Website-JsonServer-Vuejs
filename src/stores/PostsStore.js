@@ -1,9 +1,9 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
-import { useAuthStore } from "./auth";
+import { useAuthStore } from "./AuthStore";
 import Toast from "vue-toastification";
 
-export const usePostsStore = defineStore("posts", () => {
+export const usePostsStore = defineStore("postsStore", () => {
   const posts = ref([]);
   const error = ref(null);
 
@@ -128,5 +128,15 @@ export const usePostsStore = defineStore("posts", () => {
     }
   };
 
-  return { getPosts, posts };
+  return {
+    posts,
+    error,
+    getPosts,
+    getPost,
+    createPost,
+    getPostsByUser,
+    editPost,
+    deletePost,
+    filterPost,
+  };
 });

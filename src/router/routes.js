@@ -9,7 +9,7 @@ import PostDetails from "../pages/PostDetails.vue";
 import Login from "../pages/Login.vue";
 import Register from "../pages/Register.vue";
 import editPost from "../pages/editPost.vue";
-import { useAuthStore } from "../store/auth";
+import { useAuthStore } from "../stores/AuthStore";
 
 export const router = createRouter({
   history: createWebHistory(),

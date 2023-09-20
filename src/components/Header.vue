@@ -33,49 +33,40 @@
   </nav>
 </template>
 
-<script>
-import { mapActions, mapState } from "pinia";
-import { useAuthStore } from "../store/auth";
-export default {
-  data() {
-    return {
-      menu: [
-        { title: "Home", path: "/", private: false },
-        { title: "Login", path: "/login", private: false },
-        { title: "Register", path: "/register", private: false },
-        { title: "My Post", path: "/my-post", private: true },
-        { title: "Create Post", path: "/create-post", private: true },
-      ],
-    };
-  },
+<script setup>
+import { ref, computed } from "vue";
+import { useAuthStore } from "../stores/AuthStore";
+import { useRouter, useRoute } from "vue-router";
+import { storeToRefs } from "pinia";
 
-  methods: {
-    logout() {
-      this.hanleLogout();
-      return this.$router.push("/login");
-    },
+const store = useAuthStore();
+const { isAuthenticated } = storeToRefs(store);
+const router = useRouter();
+const route = useRoute();
 
-    ...mapActions(useAuthStore, ["hanleLogout"]),
-  },
+// State
+const menu = ref([
+  { title: "Home", path: "/", private: false },
+  { title: "Login", path: "/login", private: false },
+  { title: "Register", path: "/register", private: false },
+  { title: "My Post", path: "/my-post", private: true },
+  { title: "Create Post", path: "/create-post", private: true },
+]);
 
-  computed: {
-    active() {
-      return this.$route.path;
-    },
-
-    filterMenu() {
-      let menu = [];
-
-      if (this.isAuthenticated) {
-        menu = this.menu.filter((item) => item.private);
-      } else {
-        menu = this.menu.filter((item) => !item.private);
-      }
-
-      return menu;
-    },
-
-    ...mapState(useAuthStore, ["isAuthenticated"]),
-  },
+const logout = () => {
+  store.hanleLogout();
+  return router.push("/login");
 };
+
+const active = computed(() => {
+  return route.path;
+});
+
+const filterMenu = computed(() => {
+  if (isAuthenticated.value) {
+    return menu.value.filter((item) => item.private);
+  } else {
+    return menu.value.filter((item) => !item.private);
+  }
+});
 </script>

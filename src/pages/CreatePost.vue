@@ -16,7 +16,7 @@
 <!-- FUUNCTIONALITY -->
 <script>
 import { mapActions, mapState } from "pinia";
-import { usePostsStore } from "../store/posts";
+import { usePostsStore } from "../stores/PostsStore";
 import { useToast } from "vue-toastification";
 
 import Form from "../components/Form.vue";

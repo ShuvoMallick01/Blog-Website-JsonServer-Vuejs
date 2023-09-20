@@ -48,53 +48,37 @@
 </template>
 
 <!-- FUUNCTIONALITY -->
-<script>
-import { mapActions, mapState } from "pinia";
-import { useAuthStore } from "../store/auth";
+<script setup>
+import { ref } from "vue";
+import { storeToRefs } from "pinia";
+import { useAuthStore } from "../stores/AuthStore";
 import { useToast } from "vue-toastification";
+import { useRouter } from "vue-router";
 
 const toast = useToast();
+const store = useAuthStore();
+const { userLogin } = store;
+const { error } = storeToRefs(store);
+const router = useRouter();
 
-export default {
-  data() {
-    return {
-      email: "",
-      password: "",
-    };
-  },
+// State
+const email = ref("");
+const password = ref("");
 
-  methods: {
-    ...mapActions(useAuthStore, ["userLogin"]),
+const handleForm = async () => {
+  // console.log(email.value, password.value);
 
-    async handleForm() {
-      console.log(this.email, this.password);
+  await userLogin({ email: email.value, password: password.value });
 
-      await this.userLogin({ email: this.email, password: this.password });
+  if (error) {
+    toast(error);
+    error = null;
+  } else {
+    toast.success("Login Successfully");
+    return router.replace("/");
+  }
 
-      if (this.error) {
-        toast(this.error);
-        this.error = null;
-      } else {
-        toast.success("Login Successfully");
-        this.$router.replace("/");
-      }
-
-      this.email = "";
-      this.password = "";
-
-      // if {
-      //   this.email = "";
-      //   this.password = "";
-      //   toast.success("Login Successfully");
-      // } catch (error) {
-      //   toast.error("Login Failed");
-      //   console.log(error);
-      // }
-    },
-  },
-
-  computed: {
-    ...mapState(useAuthStore, ["user", "error"]),
-  },
+  email.value = "";
+  password.value = "";
 };
 </script>

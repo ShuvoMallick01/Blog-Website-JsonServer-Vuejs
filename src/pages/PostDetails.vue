@@ -33,7 +33,7 @@
 <!-- FUNCTIONALITY -->
 <script>
 import { mapActions, mapState } from "pinia";
-import { usePostsStore } from "../store/posts";
+import { usePostsStore } from "../stores/PostsStore";
 import Loading from "../components/Loading.vue";
 
 export default {

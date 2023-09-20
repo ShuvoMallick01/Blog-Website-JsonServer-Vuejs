@@ -86,7 +86,7 @@
 <!-- FUUNCTIONALITY -->
 <script>
 import { mapActions, mapState } from "pinia";
-import { useAuthStore } from "../store/auth";
+import { useAuthStore } from "../stores/AuthStore";
 import { useToast } from "vue-toastification";
 const toast = useToast();
 

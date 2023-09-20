@@ -89,89 +89,79 @@
   </div>
 </template>
 
-<script>
-import { mapActions, mapState } from "pinia";
-import { usePostsStore } from "../store/posts";
+<script setup>
+import { ref, watch } from "vue";
+import { storeToRefs } from "pinia";
+import { usePostsStore } from "../stores/PostsStore";
 import { format } from "date-fns";
 import PostTableRow from "../components/PostTableRow.vue";
 import Loading from "../components/Loading.vue";
 import { useToast } from "vue-toastification";
+import { useRouter } from "vue-router";
+
 const toast = useToast();
+const store = usePostsStore();
+const router = useRouter();
 
-export default {
-  data() {
-    return {
-      posts: [],
-      searchInput: null,
-      loading: false,
-      filterPostList: [],
-    };
-  },
+const { error } = storeToRefs(store);
+const { deletePost, filterPost, getPostsByUser } = store;
 
-  methods: {
-    async handleDeletePost(id) {
-      try {
-        await this.deletePost(id);
-        console.log(this.error);
-        if (!this.error) {
-          toast.success("Successfully Post Delete!");
-          this.$router.push("/");
-        }
-      } catch (error) {
-        if (this.error) {
-          toast.error("Someting Wents Wrong");
-        }
-      }
-    },
+// State
+const posts = ref([]);
+const searchInput = ref(null);
+const loading = ref(false);
+const filterPostList = ref([]);
 
-    formatDate(date) {
-      return format(new Date(date), "dd MMM yyyy");
-    },
+const handleDeletePost = async (id) => {
+  try {
+    await deletePost(id);
+    console.log(error);
 
-    ...mapActions(usePostsStore, [
-      "getPostsByUser",
-      "deletePost",
-      "filterPost",
-    ]),
-
-    async handleFilterPost() {
-      // console.log(filterPostList);
-      try {
-        this.loading = true;
-        let data = await this.filterPost(this.searchInput);
-        this.filterPostList = [...data];
-        console.log(this.filterPostList);
-        return;
-      } catch (error) {
-        console.log(error);
-      } finally {
-        this.loading = false;
-      }
-    },
-  },
-
-  watch: {
-    searchInput(newSearch, oldSearch) {
-      this.searchInput = newSearch;
-      this.handleFilterPost();
-    },
-  },
-
-  computed: {
-    ...mapState(usePostsStore, ["error"]),
-  },
-
-  beforeRouteEnter(to, form, next) {
-    next(async (vm) => {
-      let data = await vm.getPostsByUser();
-      vm.posts = data;
-      vm.filterPostList = vm.posts;
-    });
-  },
-
-  components: {
-    PostTableRow,
-    Loading,
-  },
+    if (!error) {
+      toast.success("Successfully Post Delete!");
+      router.push("/");
+    }
+  } catch (error) {
+    if (this.error) {
+      toast.error("Someting Wents Wrong");
+    }
+  }
 };
+
+const formatDate = (date) => {
+  return format(new Date(date), "dd MMM yyyy");
+};
+
+const handleFilterPost = async () => {
+  // console.log(filterPostList);
+  try {
+    loading.value = true;
+    let data = await filterPost(searchInput.value);
+    filterPostList.value = [...data];
+    console.log(filterPostList.value);
+    return;
+  } catch (error) {
+    console.log(error);
+  } finally {
+    loading.value = false;
+  }
+};
+
+// watch(searchInput, (newSearch, oldSearch) => {
+//   searchInput.value = newSearch;
+//   handleFilterPost();
+// });
+
+// onBeforeRouteEnter(async (to, form, next) => {
+//   let data = await getPostsByUser();
+//   console.log(data);
+//   try {
+//     next(async (vm) => {
+//       vm.posts = data;
+//       vm.filterPostList = vm.posts;
+//     });
+//   } catch (error) {
+//     console.log(error);
+//   }
+// });
 </script>

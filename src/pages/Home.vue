@@ -48,11 +48,11 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import Loading from "../components/Loading.vue";
-import { mapActions, mapState } from "pinia";
-import { usePostsStore } from "../store/posts";
+import { storeToRefs, mapActions, mapState } from "pinia";
+import { usePostsStore } from "../stores/PostsStore";
 
 const store = usePostsStore();
-const posts = store.posts;
+const { posts } = storeToRefs(store);
 
 const loading = ref(true);
 

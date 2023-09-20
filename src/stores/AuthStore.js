@@ -7,6 +7,7 @@ export const useAuthStore = defineStore("authStore", () => {
       ? JSON.parse(localStorage.getItem("user"))
       : null
   );
+
   const error = ref(null);
 
   const userRegistration = async (data) => {
@@ -24,9 +25,9 @@ export const useAuthStore = defineStore("authStore", () => {
     if (response.ok && response.status === 201) {
       const user = await response.json();
       localStorage.setItem("user", JSON.stringify(user));
-      this.user = user;
+      user.value = user;
     } else {
-      this.error = await response.json();
+      error.value = await response.json();
     }
   };
 
@@ -40,26 +41,23 @@ export const useAuthStore = defineStore("authStore", () => {
       },
     });
 
-    console.log(response);
-
-    // if (!response.ok || !response.status === 400)
-    //   throw new Error("RESGISTER USER: someting went wrong");
-
     if (response.ok && response.status === 200) {
       const user = await response.json();
       localStorage.setItem("user", JSON.stringify(user));
-      this.user = user;
+      user.value = user;
     } else {
-      this.error = await response.json();
+      error.value = await response.json();
     }
   };
 
   const hanleLogout = () => {
-    this.user = "";
+    user.value = "";
     localStorage.removeItem("user");
   };
 
   const isAuthenticated = computed(() => {
     return user.value ? true : false;
   });
+
+  return { useAuthStore, isAuthenticated, hanleLogout, userLogin };
 });
