@@ -25,7 +25,6 @@ import { useRouter } from "vue-router";
 const toast = useToast();
 const store = usePostsStore();
 const router = useRouter();
-const { createPost } = store;
 const { error } = storeToRefs(store);
 
 // State
@@ -51,9 +50,10 @@ const handleSubmit = async (event) => {
   if (event.submitter.name === "createpost") {
     try {
       console.log("await createpost");
-      await createPost(postData);
-      console.log(error);
-      if (!error) {
+      await store.createPost(postData);
+      console.log(error.value);
+
+      if (!error.value) {
         toast.success("Post Created Successfully");
         router.replace("/");
       }

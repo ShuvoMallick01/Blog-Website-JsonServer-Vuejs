@@ -25,8 +25,7 @@ export const usePostsStore = defineStore("postsStore", () => {
 
   const createPost = async (data) => {
     const { user } = useAuthStore();
-
-    console.log("Call Function", data);
+    console.log(user, data);
 
     const res = await fetch(`http://localhost:5000/posts`, {
       method: "POST",

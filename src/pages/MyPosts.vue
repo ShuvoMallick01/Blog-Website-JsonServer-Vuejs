@@ -90,7 +90,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { storeToRefs } from "pinia";
 import { usePostsStore } from "../stores/PostsStore";
 import { format } from "date-fns";
@@ -102,7 +102,6 @@ import { useRouter } from "vue-router";
 const toast = useToast();
 const store = usePostsStore();
 const router = useRouter();
-
 const { error } = storeToRefs(store);
 const { deletePost, filterPost, getPostsByUser } = store;
 
@@ -115,11 +114,10 @@ const filterPostList = ref([]);
 const handleDeletePost = async (id) => {
   try {
     await deletePost(id);
-    console.log(error);
 
-    if (!error) {
+    if (!error.value) {
       toast.success("Successfully Post Delete!");
-      router.push("/");
+      router.push("/my-post");
     }
   } catch (error) {
     if (this.error) {
@@ -147,21 +145,19 @@ const handleFilterPost = async () => {
   }
 };
 
-// watch(searchInput, (newSearch, oldSearch) => {
-//   searchInput.value = newSearch;
-//   handleFilterPost();
-// });
+watch(searchInput, (newSearch, oldSearch) => {
+  searchInput.value = newSearch;
+  handleFilterPost();
+});
 
-// onBeforeRouteEnter(async (to, form, next) => {
-//   let data = await getPostsByUser();
-//   console.log(data);
-//   try {
-//     next(async (vm) => {
-//       vm.posts = data;
-//       vm.filterPostList = vm.posts;
-//     });
-//   } catch (error) {
-//     console.log(error);
-//   }
-// });
+onMounted(async () => {
+  let data = await getPostsByUser();
+  // console.log(data);
+  try {
+    posts.value = data;
+    filterPostList.value = posts.value;
+  } catch (error) {
+    console.log(error);
+  }
+});
 </script>

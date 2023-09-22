@@ -32,67 +32,63 @@
 
 <!-- FUNCTIONALITY -->
 <script setup>
-import { ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { mapActions, mapState } from "pinia";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute, onBeforeRouteUpdate } from "vue-router";
 import { usePostsStore } from "../stores/PostsStore";
 import Loading from "../components/Loading.vue";
 
 const router = useRouter();
+const route = useRoute();
 const store = usePostsStore();
 
 // State
-const post = ref(null);
-const loading = ref(true);
-const id = ref(null);
+let post = ref(null);
+let loading = ref(true);
+let id = ref(null);
 
-// onBeforeRouteEnter(async (to, from, next) => {
-//   try {
-//     loading.value = true;
-//     let data = await store.getPost(to.params.id);
+// Methods
+onMounted(async () => {
+  loading.value = true;
+  let data = await store.getPost(route.params.id);
 
-//     if (data) {
-//       post.value = data;
-//       loading.value = false;
-//     } else {
-//       router.replace("/");
-//     }
-//   } catch (error) {
-//     console.error(error);
-//     // router.replace("/");
-//   }
+  if (data) {
+    post.value = data;
+  } else {
+    router.replace("/");
+  }
 
-//   next();
-// });
+  loading.value = false;
+});
 
-// onBeforeRouteUpdate= async(to, from) => {
-//   this.loading = true;
-//   let post = await this.getPost(to.params.id);
-//   if (post) {
-//     this.post = post;
-//   } else {
-//     this.$router.replace("/");
-//   }
-//   this.loading = false;
-// }
+onBeforeRouteUpdate(async (to, from) => {
+  let data = await store.getPost(to.params.id);
+  if (data) {
+    post.value = data;
+  } else {
+    router.replace("/");
+  }
+  loading.value = false;
+});
 
 const handleNext = () => {
-  // if (this.posts.length > this.post.id) {
-  //   this.$router.push("/posts/" + (+this.post.id + 1));
-  // } else {
-  //   this.$router.replace("/");
-  // }
+  if (store.posts.length > post.value.id) {
+    router.push("/posts/" + (+post.value.id + 1));
+  } else {
+    router.replace("/");
+  }
 
   router.push("/posts/" + (+post.value.id + 1));
 };
 
 const handlePrevious = () => {
-  // if (this.id > 1) {
-  //   this.$router.push("/posts/" + (+this.post.id - 1));
-  // } else {
-  //   this.$router.replace("/posts");
-  // }
+  console.log("click");
+  if (route.params.id > 1) {
+    router.push("/posts/" + (+post.value.id - 1));
+  } else {
+    router.replace("/");
+  }
 
-  router.push("/posts/" + (+post.value - 1));
+  router.push("/posts/" + (+post.value.id - 1));
 };
 </script>

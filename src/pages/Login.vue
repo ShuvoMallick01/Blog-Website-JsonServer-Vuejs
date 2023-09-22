@@ -62,8 +62,8 @@ const { error } = storeToRefs(store);
 const router = useRouter();
 
 // State
-const email = ref("");
-const password = ref("");
+let email = ref("");
+let password = ref("");
 
 const handleForm = async () => {
   // console.log(email.value, password.value);
