@@ -58,7 +58,7 @@ import { useRouter } from "vue-router";
 const toast = useToast();
 const store = useAuthStore();
 const { userLogin } = store;
-const { error } = storeToRefs(store);
+// const { error } = storeToRefs(store);
 const router = useRouter();
 
 // State
@@ -68,17 +68,22 @@ let password = ref("");
 const handleForm = async () => {
   // console.log(email.value, password.value);
 
-  await userLogin({ email: email.value, password: password.value });
-
-  if (error) {
-    toast(error);
-    error = null;
-  } else {
+  try {
+    await userLogin({ email: email.value, password: password.value });
     toast.success("Login Successfully");
     return router.replace("/");
+  } catch (error) {
+    console.log(error);
   }
 
   email.value = "";
   password.value = "";
+
+  // if (error) {
+  //   toast(error);
+  //   error = null;
+  // } else {
+
+  // }
 };
 </script>

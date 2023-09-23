@@ -24,15 +24,14 @@ export const usePostsStore = defineStore("postsStore", () => {
   };
 
   const createPost = async (data) => {
-    const { user } = useAuthStore();
-    console.log(user, data);
+    const { userState } = useAuthStore();
 
     const res = await fetch(`http://localhost:5000/posts`, {
       method: "POST",
       body: JSON.stringify(data),
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${user.accessToken}`,
+        Authorization: `Bearer ${userState.user.accessToken}`,
       },
     });
 
@@ -48,12 +47,12 @@ export const usePostsStore = defineStore("postsStore", () => {
   };
 
   const getPostsByUser = async () => {
-    const { user } = useAuthStore();
+    const { userState } = useAuthStore();
 
     const res = await fetch(`http://localhost:5000/posts/user`, {
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${user.accessToken}`,
+        Authorization: `Bearer ${userState.user.accessToken}`,
       },
     });
 
@@ -65,13 +64,13 @@ export const usePostsStore = defineStore("postsStore", () => {
   };
 
   const editPost = async (id, data) => {
-    const { user } = useAuthStore();
+    const { userState } = useAuthStore();
     const res = await fetch(`http://localhost:5000/600/posts/${id}`, {
       method: "PATCH",
       body: JSON.stringify(data),
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${user.accessToken}`,
+        Authorization: `Bearer ${userState.user.accessToken}`,
       },
     });
 
@@ -85,12 +84,12 @@ export const usePostsStore = defineStore("postsStore", () => {
   };
 
   const deletePost = async (id) => {
-    const { user } = useAuthStore();
+    const { userState } = useAuthStore();
 
     const res = await fetch(`http://localhost:5000/600/posts/${id}`, {
       method: "DELETE",
       headers: {
-        Authorization: `Bearer ${user.accessToken}`,
+        Authorization: `Bearer ${userState.user.accessToken}`,
       },
     });
 
@@ -104,7 +103,7 @@ export const usePostsStore = defineStore("postsStore", () => {
   };
 
   const filterPost = async (searchInput) => {
-    const { user } = useAuthStore();
+    const { userState } = useAuthStore();
     console.log(searchInput);
 
     const res = await fetch(
@@ -113,7 +112,7 @@ export const usePostsStore = defineStore("postsStore", () => {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${user.accessToken}`,
+          Authorization: `Bearer ${userState.user.accessToken}`,
         },
       }
     );

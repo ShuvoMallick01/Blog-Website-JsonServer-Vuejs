@@ -3,11 +3,11 @@ import { ref, reactive, computed } from "vue";
 
 export const useAuthStore = defineStore("authStore", () => {
   // State
-  let user = ref(
-    localStorage.getItem("user")
+  let userState = reactive({
+    user: localStorage.getItem("user")
       ? JSON.parse(localStorage.getItem("user"))
-      : null
-  );
+      : null,
+  });
   let error = ref(null);
 
   // Methods
@@ -25,14 +25,16 @@ export const useAuthStore = defineStore("authStore", () => {
     if (response.ok && response.status === 201) {
       const data = await response.json();
       localStorage.setItem("user", JSON.stringify(data));
-      user.value = data;
+      userState.user = data;
     } else {
-      error.value = await response.json();
+      const error = await response.json();
+      throw new Error(error);
     }
   };
 
   const userLogin = async (data) => {
-    console.log(data);
+    // console.log(data);
+
     const response = await fetch("http://localhost:5000/login", {
       method: "POST",
       body: JSON.stringify(data),
@@ -44,27 +46,25 @@ export const useAuthStore = defineStore("authStore", () => {
     if (response.ok && response.status === 200) {
       const user = await response.json();
       localStorage.setItem("user", JSON.stringify(user));
-
-      user.value = user;
+      userState.user = user;
     } else {
-      error.value = await response.json();
+      const error = await response.json();
+      throw new Error(error);
     }
   };
 
   const hanleLogout = () => {
     localStorage.removeItem("user");
-    user.value = null;
+    userState.user = null;
     return;
   };
 
   const isAuthenticated = computed(() => {
-    return user.value ? true : false;
+    return userState.user ? true : false;
   });
 
-  console.log(user.value);
-
   return {
-    user,
+    userState,
     useAuthStore,
     userRegistration,
     isAuthenticated,
