@@ -63,6 +63,7 @@ onMounted(async () => {
 
 onBeforeRouteUpdate(async (to, from) => {
   let data = await store.getPost(to.params.id);
+
   if (data) {
     post.value = data;
   } else {
@@ -71,24 +72,21 @@ onBeforeRouteUpdate(async (to, from) => {
   loading.value = false;
 });
 
+// Previous
+const handlePrevious = () => {
+  if (route.params.id > 1) {
+    router.push("/posts/" + (+post.value.id - 1));
+  } else {
+    router.replace("/");
+  }
+};
+
+// Next
 const handleNext = () => {
   if (store.posts.length > post.value.id) {
     router.push("/posts/" + (+post.value.id + 1));
   } else {
     router.replace("/");
   }
-
-  router.push("/posts/" + (+post.value.id + 1));
-};
-
-const handlePrevious = () => {
-  console.log("click");
-  if (route.params.id > 1) {
-    router.push("/posts/" + (+post.value.id - 1));
-  } else {
-    router.replace("/");
-  }
-
-  router.push("/posts/" + (+post.value.id - 1));
 };
 </script>

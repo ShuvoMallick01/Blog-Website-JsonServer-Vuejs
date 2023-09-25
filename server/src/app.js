@@ -28,6 +28,13 @@ server.use((req, res, next) => {
     const decode = jwt.decode(token);
     req.body.createdAt = Date.now();
     req.body.userId = +decode.sub;
+    req.body.published = true;
+
+    const user = router.db
+      .getState()
+      .users.find((user) => user.id === +decode.sub);
+
+    req.body.createdBy = user.name;
   }
 
   if (req.method === "GET" && req.path === "/posts/user") {

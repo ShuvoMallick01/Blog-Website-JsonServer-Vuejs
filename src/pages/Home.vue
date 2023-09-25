@@ -29,7 +29,7 @@
       </div>
 
       <div class="flex items-center gap-4 mt-4">
-        <i class="fa-solid fa-user"></i>
+        <i class="fa-solid fa-user"></i><span>{{ post.createdBy }}</span>
         <div>
           <i class="fa-regular fa-clock me-2"></i
           ><span>{{
