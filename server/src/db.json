@@ -11,6 +11,12 @@
       "password": "$2a$10$jN7/k2ZYmcP9TubKIKwqieGLmbb5vFYXUAdS.pgN8RSBSlEKSg3uO",
       "name": "root",
       "id": 2
+    },
+    {
+      "email": "mallick@gmail.com",
+      "password": "$2a$10$jU4maYWLQl8wgvv8v7ogOORgi5OW19.VHiQxsco2U8Wmgfea6xcum",
+      "name": "mallick",
+      "id": 3
     }
   ],
   "posts": [
@@ -53,6 +59,30 @@
       "createdAt": 1695396102263,
       "userId": 1,
       "id": 3
+    },
+    {
+      "title": "rootsdfsaf",
+      "body": "sfdsafas",
+      "tags": [
+        "new",
+        "post"
+      ],
+      "published": true,
+      "createdAt": 1695651768322,
+      "userId": 1,
+      "id": 4
+    },
+    {
+      "title": "root New Edit",
+      "body": "dsfsa",
+      "tags": [
+        "draft",
+        "save"
+      ],
+      "published": true,
+      "createdAt": 1695652055324,
+      "userId": 1,
+      "id": 5
     }
   ]
 }

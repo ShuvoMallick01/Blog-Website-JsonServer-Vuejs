@@ -53,7 +53,6 @@ import { usePostsStore } from "../stores/PostsStore";
 
 const store = usePostsStore();
 const { posts } = storeToRefs(store);
-
 const loading = ref(true);
 
 onMounted(async () => {

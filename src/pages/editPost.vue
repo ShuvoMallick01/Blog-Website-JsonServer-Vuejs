@@ -65,10 +65,8 @@ export default {
             published: this.inputFields.published,
           });
 
-          if (!this.error) {
-            toast.success("Successfully Updated Post");
-            this.$router.replace("/my-post");
-          }
+          toast.success("Successfully Updated Post");
+          this.$router.replace("/my-post");
         } catch (error) {
           toast.error("An error occurred.");
         }
@@ -81,10 +79,8 @@ export default {
             published: !this.inputFields.published,
           });
 
-          if (!this.error) {
-            toast.success("Post Save Successfully");
-            this.$router.replace("/my-post");
-          }
+          toast.success("Post Save Successfully");
+          this.$router.replace("/my-post");
         } catch (error) {
           toast.error("An error occurred.");
         }

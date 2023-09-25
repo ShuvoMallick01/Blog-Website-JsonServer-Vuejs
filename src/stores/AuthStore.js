@@ -13,24 +13,15 @@ export const useAuthStore = defineStore("authStore", () => {
 
   // Methods
   // REGISTER
-  const userRegistration = async (data) => {
+  const userRegistration = async (payload) => {
+    const { data } = await axios().post("/register", payload);
     console.log(data);
 
-    const response = await fetch("http://localhost:5000/register", {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (response.ok && response.status === 201) {
-      const data = await response.json();
+    if (data) {
       localStorage.setItem("user", JSON.stringify(data));
       userState.user = data;
     } else {
-      const error = await response.json();
-      throw new Error(error);
+      return data;
     }
   };
 
@@ -54,6 +45,7 @@ export const useAuthStore = defineStore("authStore", () => {
     return;
   };
 
+  // AUTHENTICATED
   const isAuthenticated = computed(() => {
     return userState.user ? true : false;
   });

@@ -49,29 +49,20 @@ const handleSubmit = async (event) => {
 
   if (event.submitter.name === "createpost") {
     try {
-      console.log("await createpost");
       await store.createPost(postData);
-      console.log(error.value);
-
-      if (!error.value) {
-        toast.success("Post Created Successfully");
-        router.replace("/");
-      }
+      toast.success("Post Created Successfully");
+      router.replace("/");
     } catch (error) {
-      toast.error("An error occurred.");
+      toast.error("Something Wents Wrong");
     }
-  } else {
+  } else if (event.submitter.name === "savedraft") {
     try {
       postData.published = false;
-      await createPost(postData);
-
-      if (!error) {
-        toast.success("Post saved successfully");
-
-        router.replace("/");
-      }
+      await store.createPost(postData);
+      toast.success("Post saved successfully");
+      router.replace("/");
     } catch (error) {
-      toast.error("An error occurred.");
+      toast.error("Something Wents Wrong");
     }
   }
 };

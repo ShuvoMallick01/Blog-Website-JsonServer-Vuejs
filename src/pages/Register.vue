@@ -111,21 +111,18 @@ const handleSubmit = async () => {
     return;
   }
 
-  await userRegistration({
-    name: name.value,
-    email: email.value,
-    password: password.value,
-  });
+  try {
+    await userRegistration({
+      name: name.value,
+      email: email.value,
+      password: password.value,
+    });
 
-  if (error) {
-    // console.log(error);
-    toast.error(error);
-  } else {
     toast.success("Registration Successfully!");
     router.replace("/login");
+  } catch (error) {
+    toast.error(error.data);
   }
-
-  // console.log(this.name, this.email, this.password);
 
   name.value = "";
   email.value = "";

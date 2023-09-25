@@ -115,16 +115,11 @@ const filterPostList = ref([]);
 const handleDeletePost = async (id) => {
   try {
     await deletePost(id);
-
-    if (!error.value) {
-      fetchData();
-      toast.success("Successfully Post Delete!");
-      router.push("/my-post");
-    }
+    fetchData();
+    toast.success("Successfully Post Delete!");
+    router.push("/my-post");
   } catch (error) {
-    if (this.error) {
-      toast.error("Someting Wents Wrong");
-    }
+    toast.error("Someting Wents Wrong");
   }
 };
 
