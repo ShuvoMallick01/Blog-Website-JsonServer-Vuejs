@@ -66,24 +66,15 @@ let email = ref("");
 let password = ref("");
 
 const handleForm = async () => {
-  // console.log(email.value, password.value);
-
   try {
     await userLogin({ email: email.value, password: password.value });
     toast.success("Login Successfully");
     return router.replace("/");
   } catch (error) {
-    console.log(error);
+    toast.error(error.response.data);
   }
 
   email.value = "";
   password.value = "";
-
-  // if (error) {
-  //   toast(error);
-  //   error = null;
-  // } else {
-
-  // }
 };
 </script>

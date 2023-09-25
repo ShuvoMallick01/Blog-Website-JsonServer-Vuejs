@@ -62,8 +62,6 @@ const active = computed(() => {
   return route.path;
 });
 
-// console.log(isAuthenticated.value);
-
 const filterMenu = computed(() => {
   if (isAuthenticated.value) {
     return menu.value.filter((item) => item.private);

@@ -35,9 +35,20 @@
       >
     </td>
   </tr>
+
+  <tr
+    v-if="loading"
+    class="mx-auto text-center py-10 text-slate-400 font-light text-lg"
+  >
+    <td class="py-10 text-slate-400 font-light text-lg" colspan="6">
+      <Loading v-if="loading"></Loading>
+    </td>
+  </tr>
 </template>
 
 <script setup>
+import Loading from "../components/Loading.vue";
+
 defineProps({
   posts: {
     type: Array,
@@ -52,6 +63,11 @@ defineProps({
 
   handleDeletePost: {
     type: Function,
+    required: true,
+  },
+
+  loading: {
+    type: Boolean,
     required: true,
   },
 });

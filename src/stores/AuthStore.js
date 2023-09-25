@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { ref, reactive, computed } from "vue";
+import axios from "../utilities/axios";
 
 export const useAuthStore = defineStore("authStore", () => {
   // State
@@ -11,6 +12,7 @@ export const useAuthStore = defineStore("authStore", () => {
   let error = ref(null);
 
   // Methods
+  // REGISTER
   const userRegistration = async (data) => {
     console.log(data);
 
@@ -32,27 +34,20 @@ export const useAuthStore = defineStore("authStore", () => {
     }
   };
 
-  const userLogin = async (data) => {
-    // console.log(data);
+  // LOGIN
+  const userLogin = async (payload) => {
+    const { data } = await axios().post("/login", payload);
 
-    const response = await fetch("http://localhost:5000/login", {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (response.ok && response.status === 200) {
-      const user = await response.json();
-      localStorage.setItem("user", JSON.stringify(user));
-      userState.user = user;
+    if (data) {
+      localStorage.setItem("user", JSON.stringify(data));
+      userState.user = data;
+      // return data;
     } else {
-      const error = await response.json();
-      throw new Error(error);
+      return data;
     }
   };
 
+  // LOGOUT
   const hanleLogout = () => {
     localStorage.removeItem("user");
     userState.user = null;

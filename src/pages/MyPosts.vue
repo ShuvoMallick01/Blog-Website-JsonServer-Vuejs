@@ -66,7 +66,7 @@
           </th>
         </tr>
       </thead>
-      <Loading v-if="loading"></Loading>
+      <!-- <Loading v-if="loading"></Loading> -->
 
       <tbody else>
         <PostTableRow
@@ -74,6 +74,7 @@
           :posts="filterPostList"
           :formatDate="formatDate"
           :handleDeletePost="handleDeletePost"
+          :loading="loading"
         ></PostTableRow>
 
         <tr
@@ -95,7 +96,7 @@ import { storeToRefs } from "pinia";
 import { usePostsStore } from "../stores/PostsStore";
 import { format } from "date-fns";
 import PostTableRow from "../components/PostTableRow.vue";
-import Loading from "../components/Loading.vue";
+// import Loading from "../components/Loading.vue";
 import { useToast } from "vue-toastification";
 import { useRouter } from "vue-router";
 
@@ -116,6 +117,7 @@ const handleDeletePost = async (id) => {
     await deletePost(id);
 
     if (!error.value) {
+      fetchData();
       toast.success("Successfully Post Delete!");
       router.push("/my-post");
     }
@@ -150,7 +152,7 @@ watch(searchInput, (newSearch, oldSearch) => {
   handleFilterPost();
 });
 
-onMounted(async () => {
+const fetchData = async () => {
   let data = await getPostsByUser();
   // console.log(data);
   try {
@@ -159,5 +161,9 @@ onMounted(async () => {
   } catch (error) {
     console.log(error);
   }
+};
+
+onMounted(async () => {
+  await fetchData();
 });
 </script>
